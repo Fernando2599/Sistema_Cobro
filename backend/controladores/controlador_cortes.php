@@ -1,0 +1,71 @@
+<?php
+include_once("backend/modelos/cortes.php");
+include_once("backend/modelos/ventas.php");
+include_once("conexion.php");
+class ControladorCortes{
+
+    public function crear(){
+        if(isset($_POST['monto_corte'])){
+            date_default_timezone_set('America/Mexico_City');
+            $fecha = date('Y-m-d');
+            $hora = date('H:i:s'); 
+            $corte_cantidad = $_POST['monto_corte'];
+    
+            // Calcular el total de ventas del día
+            $total_ventas = Ventas::calcularTotalVentas($fecha);
+            $total_cortes = Cortes::calcularTotalCortes($fecha);
+    
+            if ($corte_cantidad > ($total_ventas - $total_cortes)) {
+                // Redireccionar con mensaje de error
+                header("Location: ./?controlador=cortes&accion=crear&error=El monto del corte excede el total de ventas disponibles.");
+                exit(); // Detener la ejecución del script
+            } else {
+                // Guardar el corte
+                Cortes::guardarCortes($corte_cantidad, $fecha, $hora);
+                // Redireccionar con mensaje de éxito
+                header("Location: ./?controlador=cortes&accion=crear&exitoso=El corte ha sido registrado correctamente.");
+                exit();
+            }
+        }
+        include_once("backend/vistas/cortes/crear.php");
+    }
+    
+
+    public function editar() {
+        if(isset($_POST['monto_corte'])) {
+            $id = $_GET['id'];
+            date_default_timezone_set('America/Mexico_City');
+            $fecha = date('Y-m-d');
+            $corte_cantidad = $_POST['monto_corte'];
+
+            try {
+                // Guardar el corte
+                Cortes::editar($id, $corte_cantidad);
+                // Redireccionar con mensaje de éxito
+                header("Location: ./?controlador=cortes&accion=editar&id=".$id."&exitoso=Registro exitoso :).");
+                exit();
+            } catch (Exception $e) {
+                header("Location: ./?controlador=cortes&accion=editar&id=".$id."&error=El monto del corte excede el total de ventas disponibles.");
+                exit(); // Detener la ejecución del script
+            }
+        }
+        $id=$_GET['id'];
+        $corte=Cortes::buscar($id);
+        include_once("backend/vistas/cortes/editar.php");
+    }
+
+    public function borrar() {
+        if ($_GET) {
+            try {
+                $id=$_GET['id'];
+                Cortes::borrar($id);
+                header("Location:./?controlador=ventas&accion=informacion&success=Registro eliminado correctamente.");
+            } catch (Exception $e) {
+                header("Location:./?controlador=ventas&accion=informacion&error=Error al eliminar el registro." . $e->getMessage());                
+            }
+        }
+    }
+
+}
+
+?>

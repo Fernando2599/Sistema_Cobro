@@ -1,0 +1,27 @@
+.jumbotron-bg {
+    background-image: url('../../public/img/luz.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Estilo general para los enlaces de navegación */
+.nav-item.nav-link {
+    color: #0e0e0e; /* Color por defecto de los enlaces */
+    transition: color 0.2s ease-in-out;
+}
+
+/* Estilo para el enlace activo */
+.nav-item.nav-link.active {
+    font-weight: bold;
+    color: #0a0a0a; /* Color para el enlace activo */
+    background-color: #e9ecef; /* Fondo para el enlace activo */
+    border-radius: 0.25rem; /* Bordes redondeados para el fondo */
+}
+
+/* Estilo para el enlace al pasar el ratón por encima */
+.nav-item.nav-link:hover {
+    color: #0056b3; /* Color del texto al pasar el ratón */
+    background-color: #f8f9fa; /* Fondo al pasar el ratón */
+}

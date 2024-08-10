@@ -8,15 +8,43 @@ function addRecibo() {
         return; // Evita agregar recibos vacíos
     }
     
-    recibos.push(parseFloat(montoRecibo));
+    const montoReciboFloat = parseFloat(montoRecibo);
+    recibos.push(montoReciboFloat);
     
     const recibosTableBody = document.getElementById('recibos-table-body');
     const newRow = document.createElement('tr');
-    newRow.innerHTML = `<td>${montoRecibo}</td>`;
+    const index = recibos.length - 1;
+    
+    newRow.innerHTML = `
+        <td>${montoRecibo}</td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${index})">Eliminar</button>
+        </td>`;
+    
     recibosTableBody.appendChild(newRow);
     
     document.getElementById('monto_recibo').value = '';
     updateTotalRecibos();
+}
+
+function removeRecibo(index) {
+    recibos.splice(index, 1); // Elimina el recibo del array
+    
+    const recibosTableBody = document.getElementById('recibos-table-body');
+    recibosTableBody.innerHTML = ''; // Limpia la tabla
+    
+    // Vuelve a renderizar la tabla con los recibos restantes
+    recibos.forEach((monto, i) => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${monto.toFixed(2)}</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${i})">Eliminar</button>
+            </td>`;
+        recibosTableBody.appendChild(newRow);
+    });
+    
+    updateTotalRecibos(); // Actualiza el total después de eliminar
 }
 
 function updateTotalRecibos() {
@@ -52,10 +80,6 @@ document.getElementById('reciboForm').addEventListener('submit', function(event)
 });
 
 function prepareData() {
-    
     document.getElementById('recibos_hidden').value = JSON.stringify(recibos);
     document.getElementById('total_recibos_hidden').value = document.getElementById('total_recibos').value;
-    
 }
-//editar recibos
-

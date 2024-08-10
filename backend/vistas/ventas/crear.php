@@ -63,4 +63,4 @@
     </div>
 </div>
 
-<script src="public/js/venta_crear_modificado.js"></script>
+<script src="public/js/venta_crear_mod.js"></script>

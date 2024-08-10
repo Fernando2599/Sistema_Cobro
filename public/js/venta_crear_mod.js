@@ -37,7 +37,7 @@ function removeRecibo(index) {
     recibos.forEach((monto, i) => {
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
-            <td>${monto.toFixed(2)}</td>
+            <td>${monto}</td>
             <td>
                 <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${i})">Eliminar</button>
             </td>`;
@@ -49,7 +49,7 @@ function removeRecibo(index) {
 
 function updateTotalRecibos() {
     const totalRecibos = recibos.reduce((acc, current) => acc + current, 0);
-    document.getElementById('total_recibos').value = totalRecibos.toFixed(2);
+    document.getElementById('total_recibos').value = totalRecibos;
     calculateChange();
 }
 
@@ -60,7 +60,7 @@ function calculateChange() {
     if (efectivoStr !== "") {
         const efectivo = parseFloat(efectivoStr);
         const cambio = efectivo - totalRecibos;
-        document.getElementById('cambio').value = cambio.toFixed(2);
+        document.getElementById('cambio').value = cambio;
     } else {
         document.getElementById('cambio').value = '';
     }

@@ -90,33 +90,6 @@
         <br>
         <div class="card">
                     <div class="card-header">
-                            Información del día
-                    </div>
-                    <div class="card-body">
-                            <table
-                                class="table table-bordered"
-                            >
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Total de talonarios</th>
-                                        <th scope="col">Venta total</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    
-                                    <!-- Datos para informacion de la caja-->
-                                    <tr>
-                                        <td><?php echo $talonarios_total; ?></td>
-                                        <td><?php echo $venta_total; ?></td>
-                                    </tr>   
-                                </tbody>
-                            </table>
-                    </div>
-        </div>
-        <br>
-        <div class="card">
-                    <div class="card-header">
                         Información de cortes
                     </div>
                     <div class="card-body">
@@ -151,6 +124,33 @@
                         </table>
                     </div>
         </div>
+        <br>
+        <div class="card">
+                    <div class="card-header">
+                            Información del día
+                    </div>
+                    <div class="card-body">
+                            <table
+                                class="table table-bordered"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Venta total</th>
+                                        <th scope="col">Total de talonarios</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    
+                                    <!-- Datos para informacion de la caja-->
+                                    <tr>
+                                        <td><?php echo $venta_total; ?></td>
+                                        <td><?php echo $talonarios_total; ?></td> 
+                                    </tr>   
+                                </tbody>
+                            </table>
+                    </div>
+        </div> 
     </div>
 
 </div>

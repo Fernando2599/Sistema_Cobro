@@ -60,6 +60,15 @@ class Ventas{
         return $resultado['total_ventas'] ?: 0;
     }
 
+    public static function CalcularTotalDeTalonarios($fecha){
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("SELECT COUNT(monto_recibo) AS total_talonarios FROM recibo WHERE fecha = ?");
+        $sql->execute(array($fecha));
+        
+        $resultado = $sql->fetch();
+        return $resultado['total_talonarios'] ?: 0;
+    }
+
     public static function editar($id, $monto_recibo){
         $conexionBD = BD::crearInstancia();
 

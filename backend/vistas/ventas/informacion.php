@@ -31,8 +31,6 @@
                     </thead>
                     <tbody>
                         <?php 
-                        $suma_total_venta = 0;
-                        $suma_total_talonarios = 0; // Inicializar la suma
                         foreach ($ventas as $info): ?>
                             <tr>
                                 <td><?php echo $info->fecha; ?></td>
@@ -48,10 +46,6 @@
                                 </td>
                                 <?php endif;?>
                             </tr>
-                            <?php 
-                                $suma_total_venta += $info->monto_recibo; // Sumar el total_venta
-                                $suma_total_talonarios += 1;
-                            ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -84,18 +78,11 @@
                                 </thead>
 
                                 <tbody>
-                                    <?php 
-                                    $suma_total_cortes = 0;
-                                    foreach ($cortes as $corte) {
-                                        $suma_total_cortes += $corte->corte_cantidad;
-                                    }
-                                    $total_en_caja = $suma_total_venta - $suma_total_cortes;
-                                    ?>
-                                
+                                    
+                                    <!-- Datos para informacion de la caja-->
                                     <tr>
-                                        <td><?php echo $total_en_caja; ?></td>
-                                        <td><?php echo $suma_total_talonarios; ?></td>
-                                        <td><?php echo $suma_total_venta; ?></td>
+                                        <td><?php echo $venta_total - $cortes_total; ?></td>
+                                        <td><?php echo $talonarios_total; ?></td>
                                         <td><?php echo $venta_total; ?></td>
                                     </tr>   
                                 </tbody>

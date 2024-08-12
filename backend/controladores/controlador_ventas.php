@@ -19,11 +19,16 @@ class ControladorVentas {
             date_default_timezone_set('America/Mexico_City');
             $fecha_consulta = date('Y-m-d');
         }
-        
+        //Obtiene cada uno de los registros
         $ventas=Ventas::consultarRegistros($fecha_consulta);
-        $cortes = Cortes::consultar($fecha_consulta);
+        $cortes = Cortes::consultarRegistros($fecha_consulta);
 
+        //Obtiene la suma de los montos de cada registro
         $venta_total = Ventas::calcularTotalVentas($fecha_consulta);
+        $cortes_total = Cortes::calcularTotalCortes($fecha_consulta);
+
+        //Cuenta la cantidad de registros
+        $talonarios_total = Ventas::CalcularTotalDeTalonarios($fecha_consulta);
 
         // Ordenar la lista de ventas por fecha
         

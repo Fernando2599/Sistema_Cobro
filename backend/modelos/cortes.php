@@ -19,7 +19,7 @@ class Cortes{
         $sql->execute(array($corte_cantidad, $fecha, $hora));
     }
 
-    public static function consultar($fecha_consulta = null){
+    public static function consultarRegistros($fecha_consulta = null){
         date_default_timezone_set('America/Mexico_City');
         $lista_cortes=[]; 
         $conexionBD = BD::crearInstancia();

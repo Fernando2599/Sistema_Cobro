@@ -15,10 +15,10 @@ class Cortes{
         $this->hora = $hora;
     }
 
-    public static function guardarCortes($corte_cantidad, $fecha, $hora){
+    public static function guardarCortes($corte_cantidad, $talonarios, $fecha, $hora){
         $conexionBD = BD::crearInstancia();
-        $sql = $conexionBD->prepare("INSERT INTO corte(corte_cantidad, fecha, hora) VALUES(?,?,?)");
-        $sql->execute(array($corte_cantidad, $fecha, $hora));
+        $sql = $conexionBD->prepare("INSERT INTO corte(corte_cantidad, talonarios, fecha, hora) VALUES(?,?,?,?)");
+        $sql->execute(array($corte_cantidad, $talonarios, $fecha, $hora));
     }
 
     public static function consultarRegistros($fecha_consulta = null){

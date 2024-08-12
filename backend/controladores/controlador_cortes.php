@@ -10,21 +10,25 @@ class ControladorCortes{
             $fecha = date('Y-m-d');
             $hora = date('H:i:s'); 
             $corte_cantidad = $_POST['monto_corte']; // obteniendo datos del form
-            $talonarios_cantidad = $_POST['talonarios']; // obteniendo datos del form
+            $talon_cant= $_POST['talonarios']; // obteniendo datos del form
     
-            // Calcular el total de ventas del día
+            // Calcula el total de ventas del día
             $total_ventas = Ventas::calcularTotalVentas($fecha);
-            // Calcular el total de cortes al día
+            // Calcula el total de cortes al día
             $total_cortes = Cortes::calcularTotalCortes($fecha);
-            
+            //Calcula la suma total de talonarios registrados en los cortes
+            $sum_talon = Cortes::consultarTalonariosEnCorte($fecha_consulta);
+            //Calcula la cantidad de talonarios
+            $count_talon = Ventas::CalcularTotalDeTalonarios($fecha_consulta);
+
     
-            if ($corte_cantidad > ($total_ventas - $total_cortes)) {
+            if (($corte_cantidad > ($total_ventas - $total_cortes)) || ($talon_cant > ($count_talon - $sum_talon))) {
                 // Redireccionar con mensaje de error
-                header("Location: ./?controlador=cortes&accion=crear&error=El monto del corte excede el total de ventas disponibles.");
+                header("Location: ./?controlador=cortes&accion=crear&error=Verifique los montos e intente nuevamente.");
                 exit(); // Detener la ejecución del script
             } else {
                 // Guardar el corte
-                Cortes::guardarCortes($corte_cantidad, $fecha, $hora);
+                Cortes::guardarCortes($corte_cantidad,$talon_cant, $fecha, $hora);
                 // Redireccionar con mensaje de éxito
                 header("Location: ./?controlador=cortes&accion=crear&exitoso=El corte ha sido registrado correctamente.");
                 exit();

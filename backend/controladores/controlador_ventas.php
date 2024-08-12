@@ -26,6 +26,7 @@ class ControladorVentas {
         //Obtiene la suma de los montos de cada registro
         $venta_total = Ventas::calcularTotalVentas($fecha_consulta);
         $cortes_total = Cortes::calcularTotalCortes($fecha_consulta);
+        $monto_total_talonarios = Cortes::consultarTalonariosEnCorte($fecha_consulta);
 
         //Cuenta la cantidad de registros
         $talonarios_total = Ventas::CalcularTotalDeTalonarios($fecha_consulta);

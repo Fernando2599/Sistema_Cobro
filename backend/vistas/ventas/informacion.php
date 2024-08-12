@@ -63,7 +63,7 @@
     <div class="col-md-5">
         <div class="card">
                     <div class="card-header">
-                            Información de ventas
+                            Información de caja
                     </div>
                     <div class="card-body">
                             <table
@@ -71,9 +71,8 @@
                             >
                                 <thead>
                                     <tr>
-                                        <th scope="col">Total en caja</th>
-                                        <th scope="col">Talonarios</th>
-                                        <th scope="col">Venta total del día</th>
+                                        <th scope="col">Efectivo en caja</th>
+                                        <th scope="col">Talonarios en caja</th>
                                     </tr>
                                 </thead>
 
@@ -82,6 +81,32 @@
                                     <!-- Datos para informacion de la caja-->
                                     <tr>
                                         <td><?php echo $venta_total - $cortes_total; ?></td>
+                                        <td><?php echo $talonarios_total - $monto_total_talonarios; ?></td>
+                                    </tr>   
+                                </tbody>
+                            </table>
+                    </div>
+        </div>
+        <br>
+        <div class="card">
+                    <div class="card-header">
+                            Información del día
+                    </div>
+                    <div class="card-body">
+                            <table
+                                class="table table-bordered"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Total de talonarios</th>
+                                        <th scope="col">Venta total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    
+                                    <!-- Datos para informacion de la caja-->
+                                    <tr>
                                         <td><?php echo $talonarios_total; ?></td>
                                         <td><?php echo $venta_total; ?></td>
                                     </tr>   
@@ -98,18 +123,20 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">#corte</th>
-                                    <th scope="col">Cantidad del corte</th>
+                                    
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Talonarios</th>
                                     <?php if ($_SESSION['rol_id'] == '2'): ?>
                                         <th scope="col">Accion</th>
-                                     <?php endif;?>
+                                    <?php endif;?>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($cortes as $corte): ?>
                                 <tr>
-                                    <td><?php echo $corte->id; ?></td>
+                                    
                                     <td><?php echo $corte->corte_cantidad; ?></td>
+                                    <td><?php echo $corte->talonarios; ?></td>
                                     <?php if ($_SESSION['rol_id'] == '2'):?>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Button group name">

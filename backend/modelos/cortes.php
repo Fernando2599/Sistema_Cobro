@@ -3,12 +3,14 @@
 class Cortes{
     public $id;
     public $corte_cantidad;
+    public $talonarios;
     public $fecha;
     public $hora;
 
-    public function __construct($id, $corte_cantidad, $fecha, $hora){
+    public function __construct($id, $corte_cantidad, $talonarios, $fecha, $hora){
         $this->id = $id;
         $this->corte_cantidad = $corte_cantidad;
+        $this->talonarios = $talonarios;
         $this->fecha = $fecha;
         $this->hora = $hora;
     }
@@ -36,7 +38,7 @@ class Cortes{
         
         foreach($sql->fetchAll() as $corte){
             // Crear instancia de la clase Ventas con la nueva propiedad
-            $cortes = new Cortes($corte['id'], $corte['corte_cantidad'], $corte['fecha'], $corte['hora']);
+            $cortes = new Cortes($corte['id'], $corte['corte_cantidad'], $corte['talonarios'], $corte['fecha'], $corte['hora']);
             $lista_cortes[] = $cortes;
         }
         return $lista_cortes;
@@ -51,7 +53,7 @@ class Cortes{
         return $resultado['total_cortes'] ?: 0;
     }
 
-    public static function consultarTalonariosRegistrados($fecha){
+    public static function consultarTalonariosEnCorte($fecha){
         $conexionBD = BD::crearInstancia();
         $sql = $conexionBD->prepare("SELECT SUM(talonarios) AS total_talonarios FROM corte WHERE fecha = ?");
         $sql->execute(array($fecha));

@@ -17,9 +17,9 @@ class ControladorCortes{
             // Calcula el total de cortes al día
             $total_cortes = Cortes::calcularTotalCortes($fecha);
             //Calcula la suma total de talonarios registrados en los cortes
-            $sum_talon = Cortes::consultarTalonariosEnCorte($fecha_consulta);
+            $sum_talon = Cortes::consultarTalonariosEnCorte($fecha);
             //Calcula la cantidad de talonarios
-            $count_talon = Ventas::CalcularTotalDeTalonarios($fecha_consulta);
+            $count_talon = Ventas::CalcularTotalDeTalonarios($fecha);
 
     
             if (($corte_cantidad > ($total_ventas - $total_cortes)) || ($talon_cant > ($count_talon - $sum_talon))) {

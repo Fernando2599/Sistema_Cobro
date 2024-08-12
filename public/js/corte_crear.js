@@ -17,10 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('corteForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Evita el envío del formulario si no se cumple la condición
 
-    const montoCorte = document.getElementById('monto_corte').value.trim(); 
+    const efectivo = document.getElementById('monto_corte').value.trim();
+    const talon = document.getElementById('talonarios').value.trim(); 
 
-    if (montoCorte === "" || parseFloat(montoCorte) <= 0) {
-        showAlert('Debe agregar un monto mayor a 0.', 'warning');
+    if ((efectivo === "" || parseFloat(efectivo) <= 0) || (talon === "" || parseFloat(talon) <= 0)) {
+        showAlert('Verifique que los campos no esten vacios.', 'warning');
         return;
     }
 

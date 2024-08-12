@@ -96,6 +96,7 @@
                                         <td><?php echo $total_en_caja; ?></td>
                                         <td><?php echo $suma_total_talonarios; ?></td>
                                         <td><?php echo $suma_total_venta; ?></td>
+                                        <td><?php echo $venta_total; ?></td>
                                     </tr>   
                                 </tbody>
                             </table>

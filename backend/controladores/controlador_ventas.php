@@ -15,11 +15,15 @@ class ControladorVentas {
         if (isset($_POST['fecha_consulta'])) {
             $fecha_consulta = $_POST['fecha_consulta'];
         } else {
-            $fecha_consulta = null;
+            // Si no se proporciona una fecha, se utiliza la fecha de hoy
+            date_default_timezone_set('America/Mexico_City');
+            $fecha_consulta = date('Y-m-d');
         }
         
         $ventas=Ventas::consultarRegistros($fecha_consulta);
         $cortes = Cortes::consultar($fecha_consulta);
+
+        $venta_total = Ventas::calcularTotalVentas($fecha_consulta);
 
         // Ordenar la lista de ventas por fecha
         

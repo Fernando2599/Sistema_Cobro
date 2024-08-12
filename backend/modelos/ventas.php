@@ -33,16 +33,10 @@ class Ventas{
         $sql->execute(array($fecha, $hora, $monto_recibo, $venta_id));
     }
 
-    public static function consultarRegistros($fecha_consulta = null){
-        date_default_timezone_set('America/Mexico_City');
+    public static function consultarRegistros($fecha_consulta){
+        
         $lista_ventas=[]; 
         $conexionBD = BD::crearInstancia();
-
-
-        // Si no se proporciona una fecha, se utiliza la fecha de hoy
-        if ($fecha_consulta === null) {
-            $fecha_consulta = date('Y-m-d');
-        }
 
         // mañana lunes modificar la consulta para poder consultar a base de la fecha del dia
         $sql = $conexionBD->prepare("SELECT * FROM recibo WHERE fecha=?");

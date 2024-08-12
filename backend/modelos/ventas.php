@@ -33,7 +33,7 @@ class Ventas{
         $sql->execute(array($fecha, $hora, $monto_recibo, $venta_id));
     }
 
-    public static function consultar($fecha_consulta = null){
+    public static function consultarRegistros($fecha_consulta = null){
         date_default_timezone_set('America/Mexico_City');
         $lista_ventas=[]; 
         $conexionBD = BD::crearInstancia();

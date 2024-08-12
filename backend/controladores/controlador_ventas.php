@@ -18,7 +18,7 @@ class ControladorVentas {
             $fecha_consulta = null;
         }
         
-        $ventas=Ventas::consultar($fecha_consulta);
+        $ventas=Ventas::consultarRegistros($fecha_consulta);
         $cortes = Cortes::consultar($fecha_consulta);
 
         // Ordenar la lista de ventas por fecha

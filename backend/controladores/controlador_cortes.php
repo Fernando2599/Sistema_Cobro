@@ -9,11 +9,14 @@ class ControladorCortes{
             date_default_timezone_set('America/Mexico_City');
             $fecha = date('Y-m-d');
             $hora = date('H:i:s'); 
-            $corte_cantidad = $_POST['monto_corte'];
+            $corte_cantidad = $_POST['monto_corte']; // obteniendo datos del form
+            $talonarios_cantidad = $_POST['talonarios']; // obteniendo datos del form
     
             // Calcular el total de ventas del día
             $total_ventas = Ventas::calcularTotalVentas($fecha);
+            // Calcular el total de cortes al día
             $total_cortes = Cortes::calcularTotalCortes($fecha);
+            
     
             if ($corte_cantidad > ($total_ventas - $total_cortes)) {
                 // Redireccionar con mensaje de error

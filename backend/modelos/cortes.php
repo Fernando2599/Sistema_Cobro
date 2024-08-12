@@ -51,6 +51,15 @@ class Cortes{
         return $resultado['total_cortes'] ?: 0;
     }
 
+    public static function consultarTalonariosRegistrados($fecha){
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("SELECT SUM(talonarios) AS total_talonarios FROM corte WHERE fecha = ?");
+        $sql->execute(array($fecha));
+
+        $resultado = $sql->fetch();
+        return $resultado['total_talonarios'] ?: 0; //devuelve el valor si en dado caso no es vacio o null
+    }
+
     public static function editar($id, $monto_corte){
         $conexionBD = BD::crearInstancia();
 

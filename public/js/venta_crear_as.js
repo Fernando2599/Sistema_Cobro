@@ -112,7 +112,8 @@ function updateRecibosTable(){
             <td>${monto}</td>
             <td>${cliente}</td>
             <td>
-                <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${index})">Eliminar</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${index})"><i class="bi bi-trash"></i>
+                </button>
             </td>`;
         recibosTableBody.appendChild(newRow);
     });

@@ -43,7 +43,7 @@
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'iniciar' && ($_GET['accion'] ?? '') === 'logout' ? 'active' : '' ?>" href="?controlador=iniciar&accion=logout">Cerrar Sesión</a>
                 <?php elseif ($_SESSION['rol_id'] == '2'): ?>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'paginas' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=paginas&accion=inicio">Inicio</a>
-                    <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'user' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=user&accion=inicio">Usuario</a>
+                    <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'user' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=user&accion=inicio">Usuarios</a>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'ventas' && ($_GET['accion'] ?? '') === 'informacion' ? 'active' : '' ?>" href="?controlador=ventas&accion=informacion">Información en caja</a>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'iniciar' && ($_GET['accion'] ?? '') === 'logout' ? 'active' : '' ?>" href="?controlador=iniciar&accion=logout">Cerrar Sesión</a>
                 <?php endif; ?>

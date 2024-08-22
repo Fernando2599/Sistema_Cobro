@@ -73,4 +73,4 @@
     </div>
 </div>
 
-<script src="public/js/venta_crear_a.js"></script>
+<script src="public/js/venta_crear_as.js"></script>

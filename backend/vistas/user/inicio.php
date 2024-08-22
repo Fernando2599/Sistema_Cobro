@@ -30,8 +30,8 @@
                     <td><?php echo $user->rol;?></td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Button group name">
-                            <a href="?controlador=user&accion=editar&id=<?php echo $user->id;?>" class="btn btn-info"> Editar </a>
-                            <a href="?controlador=user&accion=borrar&id=<?php echo $user->id;?>" class="btn btn-danger"> Borrar </a>
+                            <a href="?controlador=user&accion=editar&id=<?php echo $user->id;?>" class="btn btn-info"><i class="bi  bi-pencil"></i></a>
+                            <a href="?controlador=user&accion=borrar&id=<?php echo $user->id;?>" class="btn btn-danger"><i class="bi  bi-trash"></i></a>
                         </div>
                         
                     </td>

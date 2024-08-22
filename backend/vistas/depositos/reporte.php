@@ -39,8 +39,10 @@
                             <td><?php echo $reporte->conteo_efectivo; ?></td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Button group name">
-                                    <a href="?controlador=depositos&accion=editarReporte&id=<?php echo $reporte->id; ?>" class="btn btn-info"> Editar </a>
-                                    <a href="?controlador=depositos&accion=borrarReporte&id=<?php echo $reporte->id; ?>" class="btn btn-danger"> Borrar </a>
+                                    <a href="?controlador=depositos&accion=editarReporte&id=<?php echo $reporte->id; ?>" class="btn btn-info"><i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="?controlador=depositos&accion=borrarReporte&id=<?php echo $reporte->id; ?>" class="btn btn-danger"><i class="bi bi-trash"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

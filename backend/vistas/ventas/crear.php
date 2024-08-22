@@ -1,19 +1,22 @@
-
 <div class="container">
     <div class="row">
         <!-- Columna principal para "Recibos" y "Recibos Agregados" -->
         <div class="col-md-7">
             <!-- Bloque para "Recibos" -->
-            <div class="card mb-3"> <!-- Usamos mb-2 para un pequeño espacio entre los dos bloques -->
+            <div class="card mb-3">
                 <div class="card-header">Recibos</div>
                 <div class="card-body">
-                    <form id="reciboForm" action="?controlador=ventas&accion=guardar" method="POST">
-                        <div class="mb-3 d-flex align-items-center">
-                            <label for="monto_recibo" class="form-label me-2">Monto Recibo:</label>
-                            <input type="number" class="form-control me-2" id="monto_recibo" style="flex: 1;">
-                            <button type="button" class="btn btn-secondary me-2" onclick="addRecibo()">Agregar Recibo</button>
-                            <button type="submit" class="btn btn-success">Registrar Recibos</button>
+                    <form id="reciboForm" action="" method="POST">
+                        <!-- Campo para escanear el código de barras -->
+                        <div class="mb-2">
+                            <label for="barcodeInput" class="form-label me-2">Escanear Código de Barras:</label>
+                            <input type="text" class="form-control" id="barcodeInput" maxlength="30" oninput="handleBarcodeInput(event)" autofocus>
+
                         </div>
+    
+                        <!-- Campo para el monto del recibo (rellenado automáticamente) -->
+                        <input type="hidden" id="monto_recibo">
+                        <input type="hidden" id="no_cliente">
                         <input type="hidden" name="recibos" id="recibos_hidden">
                         <input type="hidden" name="total_recibos" id="total_recibos_hidden">
                     </form>
@@ -28,6 +31,8 @@
                         <thead>
                             <tr>
                                 <th scope="col">Monto Recibo</th>
+                                <th scope="col">No. de Servicio</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="recibos-table-body">
@@ -57,10 +62,15 @@
                             <input type="number" class="form-control" id="cambio" readonly>
                         </div>
                     </div>
+
+                    <!-- Botón fuera del formulario -->
+                    <div class="d-flex justify-content mb-2">
+                        <button type="button" class="btn btn-success" id="submitBtn">Registrar Recibos</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="public/js/venta_crear_mod.js"></script>
+<script src="public/js/venta_crear_a.js"></script>

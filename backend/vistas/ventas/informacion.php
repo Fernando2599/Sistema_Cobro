@@ -40,8 +40,12 @@
                                 <?php if ($_SESSION['rol_id'] == '2'):?>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Button group name">
-                                        <a href="?controlador=ventas&accion=editar&id=<?php echo $info->id;?>" class="btn btn-info"> Editar </a>
-                                        <a href="?controlador=ventas&accion=borrar&id=<?php echo $info->id;?>" class="btn btn-danger"> Borrar </a>
+                                    <a href="?controlador=ventas&accion=editar&id=<?php echo $info->id;?>"    class="btn btn-info">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="?controlador=ventas&accion=borrar&id=<?php echo $info->id;?>" class="btn btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
                                     </div>
                                 </td>
                                 <?php endif;?>
@@ -113,8 +117,8 @@
                                     <?php if ($_SESSION['rol_id'] == '2'):?>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Button group name">
-                                                <a href="?controlador=cortes&accion=editar&id=<?php echo $corte->id;?>" class="btn btn-info"> Editar </a>
-                                                <a href="?controlador=cortes&accion=borrar&id=<?php echo $corte->id;?>" class="btn btn-danger"> Borrar </a>
+                                                <a href="?controlador=cortes&accion=editar&id=<?php echo $corte->id;?>" class="btn btn-info"><i class="bi bi-pencil"></i></a>
+                                                <a href="?controlador=cortes&accion=borrar&id=<?php echo $corte->id;?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                                             </div>
                                         </td>
                                     <?php endif;?>

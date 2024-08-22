@@ -44,10 +44,11 @@ class ControladorCortes{
             date_default_timezone_set('America/Mexico_City');
             $fecha = date('Y-m-d');
             $corte_cantidad = $_POST['monto_corte'];
+            $talonarios = $_POST['talonarios'];
 
             try {
                 // Guardar el corte
-                Cortes::editar($id, $corte_cantidad);
+                Cortes::editar($id, $corte_cantidad, $talonarios);
                 // Redireccionar con mensaje de éxito
                 header("Location: ./?controlador=cortes&accion=editar&id=".$id."&exitoso=Registro exitoso :).");
                 exit();

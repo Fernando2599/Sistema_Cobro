@@ -62,12 +62,12 @@ class Cortes{
         return $resultado['total_talonarios'] ?: 0; //devuelve el valor si en dado caso no es vacio o null
     }
 
-    public static function editar($id, $monto_corte){
+    public static function editar($id, $monto_corte, $talonarios){
         $conexionBD = BD::crearInstancia();
 
-        $sql= $conexionBD->prepare("UPDATE corte SET corte_cantidad=? WHERE id=?");
+        $sql= $conexionBD->prepare("UPDATE corte SET corte_cantidad=?, talonarios=? WHERE id=?");
 
-        $sql->execute(array($monto_corte, $id));
+        $sql->execute(array($monto_corte, $talonarios, $id));
         header("Location:./?controlador=ventas&accion=informacion");
 
     }
@@ -84,7 +84,7 @@ class Cortes{
         $sql = $conexionBD->prepare("SELECT * FROM corte WHERE id=?");
         $sql->execute(array($id));
         $corte = $sql->fetch();
-        return new Cortes ($corte['id'], $corte['corte_cantidad'],$corte['fecha'], $corte['hora']);
+        return new Cortes ($corte['id'], $corte['corte_cantidad'], $corte['talonarios'],$corte['fecha'], $corte['hora']);
     }
 
 }

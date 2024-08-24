@@ -47,12 +47,19 @@
                         <td><?php echo $cliente->direccion;?></td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Button group name">
+                                <a href="?controlador=user&accion=borrar&id=<?php echo $cliente->id; ?>" class="btn btn-primary" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
                                 <a href="?controlador=user&accion=editar&id=<?php echo $cliente->id; ?>" class="btn btn-info">
                                     <i class="bi bi-pencil"></i>
                                 </a>
+
                                 <a href="?controlador=user&accion=borrar&id=<?php echo $cliente->id; ?>" class="btn btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">
                                     <i class="bi bi-trash"></i>
                                 </a>
+
+                                
                             </div>
                         </td>
                     </tr>

@@ -7,27 +7,29 @@ include_once("conexion.php");
 class ControladorClientes{
 
     public function inicio() {
+        // Parámetros de la paginación
+        $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+        $registros_por_pagina = 10;
+        $offset = ($pagina_actual - 1) * $registros_por_pagina;
+    
+        // Parámetros de filtrado
         $filtro_nombres = isset($_GET['filter_nombres']) ? $_GET['filter_nombres'] : '';
         $filtro_ap_pat = isset($_GET['filter_ap_pat']) ? $_GET['filter_ap_pat'] : '';
         $filtro_ap_mat = isset($_GET['filter_ap_mat']) ? $_GET['filter_ap_mat'] : '';
     
-        // Parámetros de paginación
-        $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-        $registros_por_pagina = 10; // Ajusta según tu necesidad
-        $offset = ($pagina_actual - 1) * $registros_por_pagina;
-    
         if (!empty($filtro_nombres) || !empty($filtro_ap_pat) || !empty($filtro_ap_mat)) {
-            $total_registros = Clientes::contarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat);
-            $clientes = Clientes::consultarClientesFiltradosPaginados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat, $offset, $registros_por_pagina);
+            $clientes = Clientes::consultarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat, $offset, $registros_por_pagina);
+            $total_clientes = Clientes::contarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat);
         } else {
-            $total_registros = Clientes::contarClientes();
             $clientes = Clientes::consultarClientesPaginados($offset, $registros_por_pagina);
+            $total_clientes = Clientes::contarClientes();  // O una función similar para contar todos los clientes
         }
     
-        $total_paginas = ceil($total_registros / $registros_por_pagina);
+        $total_paginas = ceil($total_clientes / $registros_por_pagina);
     
         include_once("backend/vistas/clientes/inicio.php");
     }
+    
     
 
     public function crear() {

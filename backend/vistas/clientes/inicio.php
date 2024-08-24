@@ -70,4 +70,4 @@
         
     </div>
 </div>
-<script src="public/js/user.js"></script>
+

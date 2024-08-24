@@ -28,5 +28,4 @@
         </form>
     </div>
 </div>
-<script src="public/js/toggle.js"></script>
-<script src="public/js/user.js"></script>
+<script src="public/js/clientes.js"></script>

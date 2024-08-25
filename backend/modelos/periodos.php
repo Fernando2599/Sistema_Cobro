@@ -54,5 +54,30 @@ class Periodos{
         }
         
     }
+
+    public static function historialPagos($id_cliente) {
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("
+            SELECT c.nombres, c.ap_pat, c.ap_mat, p.limite_pago, p.periodo_inicio, p.periodo_fin, ch.estado
+            FROM clientes_has_periodos ch
+            INNER JOIN clientes c ON c.id = ch.clientes_id
+            INNER JOIN periodos p ON p.id = ch.periodos_id
+            WHERE ch.clientes_id = ?
+            ORDER BY p.periodo_inicio DESC
+        ");
+        $sql->execute(array($id_cliente));
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public static function obtenerNombreCliente($id_cliente){
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("
+            SELECT nombres, ap_pat, ap_mat 
+            FROM clientes 
+            WHERE id = ?
+        ");
+        $sql->execute(array($id_cliente));
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>

@@ -46,7 +46,7 @@
                         
                         <td>
                             <div class="btn-group" role="group" aria-label="Button group name">
-                                <a href="?controlador=clientes&accion=ver&id=<?php echo htmlspecialchars($cliente->id); ?>" class="btn btn-primary" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">
+                                <a href="?controlador=periodos&accion=historial&id=<?php echo htmlspecialchars($cliente->id); ?>" class="btn btn-primary">
                                     <i class="bi bi-eye"></i>
                                 </a>
 

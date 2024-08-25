@@ -19,6 +19,24 @@ class ControladorPeriodos{
     
         include_once("backend/vistas/periodos/crear.php");
     }
+
+    public function historial() {
+        if (isset($_GET['id']) && !empty($_GET['id'])) {
+            $id_cliente = $_GET['id'];
+
+            // Obtener el historial de pagos para el cliente
+            $historial = Periodos::historialPagos($id_cliente);
+
+            // Obtener el nombre del cliente para pasarlo a la vista
+            $nombre_cliente = Periodos::obtenerNombreCliente($id_cliente);
+
+            // Incluir la vista y pasar el historial
+            include_once("backend/vistas/periodos/historial.php");
+        } else {
+            echo "ID de cliente no proporcionado.";
+        }
+    }
+    
     
 
 }

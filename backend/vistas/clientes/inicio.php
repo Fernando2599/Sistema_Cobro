@@ -14,7 +14,7 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        
                         <th>No. de Servicio</th>
                         <th>Nombres</th>
                         <th>Apellido Paterno</th>
@@ -23,7 +23,7 @@
                         <th>Acción</th>
                     </tr>
                     <tr class="filters">
-                        <td></td>
+                        
                         <td></td>
                         <td><input type="text" class="form-control" name="filter_nombres" placeholder="Nombres" value="<?php echo htmlspecialchars($filtro_nombres); ?>"></td>
                         <td><input type="text" class="form-control" name="filter_ap_pat" placeholder="Apellido Paterno" value="<?php echo htmlspecialchars($filtro_ap_pat); ?>"></td>
@@ -38,7 +38,7 @@
                 <tbody>
                 <?php foreach ($clientes as $cliente) { ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($cliente->id); ?></td>
+                        
                         <td><?php echo htmlspecialchars($cliente->numero_servicio); ?></td>                        
                         <td><?php echo htmlspecialchars($cliente->nombres); ?></td>
                         <td><?php echo htmlspecialchars($cliente->ap_pat); ?></td>

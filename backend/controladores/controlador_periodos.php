@@ -29,6 +29,7 @@ class ControladorPeriodos{
 
             // Obtener el nombre del cliente para pasarlo a la vista
             $nombre_cliente = Periodos::obtenerNombreCliente($id_cliente);
+            $monto_pagos = Periodos::obtenerNombreCliente($id_cliente);
 
             // Incluir la vista y pasar el historial
             include_once("backend/vistas/periodos/historial.php");

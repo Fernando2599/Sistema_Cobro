@@ -58,10 +58,11 @@ class Periodos{
     public static function historialPagos($id_cliente) {
         $conexionBD = BD::crearInstancia();
         $sql = $conexionBD->prepare("
-            SELECT c.nombres, c.ap_pat, c.ap_mat, p.limite_pago, p.periodo_inicio, p.periodo_fin, ch.estado
+            SELECT c.nombres, c.ap_pat, c.ap_mat, p.limite_pago, p.periodo_inicio, p.periodo_fin, ch.estado, COALESCE(r.monto_recibo, 0) AS monto_recibo
             FROM clientes_has_periodos ch
             INNER JOIN clientes c ON c.id = ch.clientes_id
             INNER JOIN periodos p ON p.id = ch.periodos_id
+            LEFT JOIN recibo r ON r.clientes_has_periodos_id = ch.id
             WHERE ch.clientes_id = ?
             ORDER BY p.periodo_inicio DESC
         ");
@@ -72,7 +73,7 @@ class Periodos{
     public static function obtenerNombreCliente($id_cliente){
         $conexionBD = BD::crearInstancia();
         $sql = $conexionBD->prepare("
-            SELECT nombres, ap_pat, ap_mat 
+            SELECT numero_servicio, nombres, ap_pat, ap_mat 
             FROM clientes 
             WHERE id = ?
         ");
@@ -93,5 +94,7 @@ class Periodos{
         $sql = $conexionBD->prepare("UPDATE clientes_has_periodos SET estado = 'pagado' WHERE periodos_id = ? AND clientes_id = ?");
         $sql->execute(array($periodo_id, $cliente_id));
     }
+
+   
 }
 ?>

@@ -16,6 +16,7 @@
             <?php
             // Resaltar el primer período como el más reciente
             $primer_periodo = array_shift($historial);
+            
             ?>
 
             <div class="row mb-4">
@@ -25,9 +26,11 @@
                             <h5 class="mb-0">Periodo Actual</h5>
                         </div>
                         <div class="card-body">
+                            <p><strong>No. de servicio:</strong> <?php echo htmlspecialchars($nombre_cliente['numero_servicio']); ?></p>
                             <p><strong>Periodo Facturado:</strong> <?php echo htmlspecialchars($primer_periodo['periodo_inicio']) . ' - ' . htmlspecialchars($primer_periodo['periodo_fin']); ?></p>
                             <p><strong>Fecha Límite de Pago:</strong> <?php echo htmlspecialchars($primer_periodo['limite_pago']); ?></p>
                             <p><strong>Estado:</strong> <?php echo ucfirst(htmlspecialchars($primer_periodo['estado'])); ?></p>
+                            <p><strong>Monto:</strong> <?php echo htmlspecialchars($primer_periodo['monto_recibo']); ?></p>
                         </div>
                     </div>
                 </div>
@@ -39,7 +42,9 @@
                     <tr>
                         <th scope="col">Periodo Facturado</th>
                         <th scope="col">Fecha Límite de Pago</th>
+                        <th scope="col">Monto</th>
                         <th scope="col">Estado</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -47,6 +52,7 @@
                         <tr>
                             <td><?php echo htmlspecialchars($pago['periodo_inicio']) . ' - ' . htmlspecialchars($pago['periodo_fin']); ?></td>
                             <td><?php echo htmlspecialchars($pago['limite_pago']); ?></td>
+                            <td><?php echo ucfirst(htmlspecialchars($pago['monto_recibo'])); ?></td>
                             <td><?php echo ucfirst(htmlspecialchars($pago['estado'])); ?></td>
                         </tr>
                     <?php endforeach; ?>

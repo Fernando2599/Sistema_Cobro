@@ -79,5 +79,19 @@ class Periodos{
         $sql->execute(array($id_cliente));
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
+
+    public static function obtenerUltimoPeriodo() {
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->query("SELECT id FROM periodos ORDER BY id DESC LIMIT 1");
+        $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+        return $resultado ? $resultado['id'] : null;
+    }
+
+    public static function actualizarEstado($periodo_id, $cliente_id) {
+        $conexionBD = BD::crearInstancia();
+        
+        $sql = $conexionBD->prepare("UPDATE clientes_has_periodos SET estado = 'pagado' WHERE periodos_id = ? AND clientes_id = ?");
+        $sql->execute(array($periodo_id, $cliente_id));
+    }
 }
 ?>

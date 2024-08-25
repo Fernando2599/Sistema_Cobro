@@ -23,16 +23,7 @@ class Clientes {
         $sql->execute(array($numero_servicio, $nombres, $ap_pat, $ap_mat));
     }
 
-    public static function consultarClientes(){
-        $lista_clientes=[];
-        $conexionBD = BD::crearInstancia();
-        $sql = $conexionBD->query("SELECT * FROM clientes");
-        foreach($sql->fetchAll() as $cliente){
-            $cliente = new Clientes($cliente['id'], $cliente['numero_servicio'], $cliente['nombres'], $cliente['ap_pat'], $cliente['ap_mat'], $cliente['direccion']);
-            $lista_clientes[] = $cliente;
-        }
-        return $lista_clientes;
-    }
+    
 
     public static function contarClientes() {
         $conexionBD = BD::crearInstancia();
@@ -56,88 +47,96 @@ class Clientes {
         return $clientes;
     }
 
-   // Función para consultar clientes filtrados con paginación
-   public static function consultarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null, $inicio = 0, $registros_por_pagina = 10) {
-    $lista_clientes = [];
-    $conexionBD = BD::crearInstancia();
+    // Función para consultar clientes filtrados con paginación
+    public static function consultarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null, $inicio = 0, $registros_por_pagina = 10) {
+        $lista_clientes = [];
+        $conexionBD = BD::crearInstancia();
+        
+        // Consulta base
+        $sql_query = "SELECT * FROM clientes WHERE 1=1";
+        $params = [];
+        
+        // Añadir filtros
+        if ($nombres) {
+            $sql_query .= " AND nombres LIKE ?";
+            $params[] = "%$nombres%";
+        }
+        if ($ap_pat) {
+            $sql_query .= " AND ap_pat LIKE ?";
+            $params[] = "%$ap_pat%";
+        }
+        if ($ap_mat) {
+            $sql_query .= " AND ap_mat LIKE ?";
+            $params[] = "%$ap_mat%";
+        }
+
+        // Añadir paginación
+        $sql_query .= " LIMIT $inicio, $registros_por_pagina";
+        
+        // Preparar la consulta
+        $sql = $conexionBD->prepare($sql_query);
+        
+        // Asociar los parámetros
+        foreach ($params as $key => $value) {
+            $sql->bindValue($key + 1, $value);
+        }
+
+        // Ejecutar la consulta
+        $sql->execute();
+
+        // Recoger los resultados
+        foreach($sql->fetchAll() as $cliente) {
+            $lista_clientes[] = new Clientes($cliente['id'], $cliente['numero_servicio'], $cliente['nombres'], $cliente['ap_pat'], $cliente['ap_mat'], $cliente['direccion']);
+        }
+
+        return $lista_clientes;
+    }   
+
+    // Función para contar clientes filtrados
+    public static function contarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null) {
+        $conexionBD = BD::crearInstancia();
+        
+        $sql_query = "SELECT COUNT(*) as total FROM clientes WHERE 1=1";
+        $params = [];
+        
+        // Añadir filtros
+        if ($nombres) {
+            $sql_query .= " AND nombres LIKE ?";
+            $params[] = "%$nombres%";
+        }
+        if ($ap_pat) {
+            $sql_query .= " AND ap_pat LIKE ?";
+            $params[] = "%$ap_pat%";
+        }
+        if ($ap_mat) {
+            $sql_query .= " AND ap_mat LIKE ?";
+            $params[] = "%$ap_mat%";
+        }
+
+        // Preparar la consulta
+        $sql = $conexionBD->prepare($sql_query);
+
+        // Asociar los parámetros
+        foreach ($params as $key => $value) {
+            $sql->bindValue($key + 1, $value);
+        }
+
+        // Ejecutar la consulta
+        $sql->execute();
+
+        // Obtener el resultado
+        $result = $sql->fetch();
+        return $result['total'];
+    }
+    // Método para obtener el ID de un cliente por su número de servicio
+    public static function obtenerIdPorNumeroServicio($numero_servicio) {
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("SELECT id FROM clientes WHERE numero_servicio = ?");
+        $sql->execute(array($numero_servicio));
+        $cliente = $sql->fetch(PDO::FETCH_ASSOC);
+        
+        return $cliente ? $cliente['id'] : null;
+    }
     
-    // Consulta base
-    $sql_query = "SELECT * FROM clientes WHERE 1=1";
-    $params = [];
-    
-    // Añadir filtros
-    if ($nombres) {
-        $sql_query .= " AND nombres LIKE ?";
-        $params[] = "%$nombres%";
-    }
-    if ($ap_pat) {
-        $sql_query .= " AND ap_pat LIKE ?";
-        $params[] = "%$ap_pat%";
-    }
-    if ($ap_mat) {
-        $sql_query .= " AND ap_mat LIKE ?";
-        $params[] = "%$ap_mat%";
-    }
-
-    // Añadir paginación
-    $sql_query .= " LIMIT $inicio, $registros_por_pagina";
-    
-    // Preparar la consulta
-    $sql = $conexionBD->prepare($sql_query);
-    
-    // Asociar los parámetros
-    foreach ($params as $key => $value) {
-        $sql->bindValue($key + 1, $value);
-    }
-
-    // Ejecutar la consulta
-    $sql->execute();
-
-    // Recoger los resultados
-    foreach($sql->fetchAll() as $cliente) {
-        $lista_clientes[] = new Clientes($cliente['id'], $cliente['numero_servicio'], $cliente['nombres'], $cliente['ap_pat'], $cliente['ap_mat'], $cliente['direccion']);
-    }
-
-    return $lista_clientes;
-}
-
-// Función para contar clientes filtrados
-public static function contarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null) {
-    $conexionBD = BD::crearInstancia();
-    
-    $sql_query = "SELECT COUNT(*) as total FROM clientes WHERE 1=1";
-    $params = [];
-    
-    // Añadir filtros
-    if ($nombres) {
-        $sql_query .= " AND nombres LIKE ?";
-        $params[] = "%$nombres%";
-    }
-    if ($ap_pat) {
-        $sql_query .= " AND ap_pat LIKE ?";
-        $params[] = "%$ap_pat%";
-    }
-    if ($ap_mat) {
-        $sql_query .= " AND ap_mat LIKE ?";
-        $params[] = "%$ap_mat%";
-    }
-
-    // Preparar la consulta
-    $sql = $conexionBD->prepare($sql_query);
-
-    // Asociar los parámetros
-    foreach ($params as $key => $value) {
-        $sql->bindValue($key + 1, $value);
-    }
-
-    // Ejecutar la consulta
-    $sql->execute();
-
-    // Obtener el resultado
-    $result = $sql->fetch();
-    return $result['total'];
-}
-    
-
 }
 ?>

@@ -161,7 +161,8 @@ document.getElementById('reciboForm').addEventListener('submit', function(event)
 
 // Prepara los datos para el envío
 function prepareData() {
-    document.getElementById('recibos_hidden').value = JSON.stringify(recibos);
+    document.getElementById('recibos_hidden').value = JSON.stringify(recibos); //array recibos
+    document.getElementById('clientes_hidden').value = JSON.stringify(clientes); //array clientes
     document.getElementById('total_recibos_hidden').value = document.getElementById('total_recibos').value;
 }
 

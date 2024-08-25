@@ -7,14 +7,15 @@ class Ventas{
     
     public $user_id;
     public $monto_recibo;
+    public $clientes_has_periodos; // Nuevo atributo
 
-    public function __construct($id, $fecha, $hora, $user_id, $monto_recibo = null){
+    public function __construct($id, $fecha, $hora, $user_id, $monto_recibo = null, $clientes_has_periodos = null) {
         $this->id = $id;
         $this->fecha = $fecha;
         $this->hora = $hora;
-        
         $this->user_id = $user_id;
         $this->monto_recibo = $monto_recibo;
+        $this->clientes_has_periodos = $clientes_has_periodos; // Inicializa el nuevo atributo
     }
 
     public static function guardarVentas($fecha, $hora, $total_venta, $user_id){ 
@@ -25,12 +26,12 @@ class Ventas{
         return $conexionBD->lastInsertId();
     }
 
-    public static function guardarRecibo($fecha, $hora, $monto_recibo, $venta_id){
+    public static function guardarRecibo($fecha, $hora, $monto_recibo, $venta_id, $clientes_has_periodos){
         
         $conexionBD = BD::crearInstancia();
-        $sql= $conexionBD->prepare("INSERT INTO recibo(fecha, hora, monto_recibo, venta_id) VALUES(?,?,?,?)");
+        $sql= $conexionBD->prepare("INSERT INTO recibo(fecha, hora, monto_recibo, venta_id, clientes_has_periodos_id) VALUES(?,?,?,?,?)");
 
-        $sql->execute(array($fecha, $hora, $monto_recibo, $venta_id));
+        $sql->execute(array($fecha, $hora, $monto_recibo, $venta_id, $clientes_has_periodos));
     }
 
     public static function consultarRegistros($fecha_consulta){
@@ -92,6 +93,9 @@ class Ventas{
         $recibo = $sql->fetch();
         return new Ventas($recibo['id'], $recibo['fecha'], $recibo['hora'], null, $recibo['monto_recibo']);
     }
+
+    
+
 
 }
 

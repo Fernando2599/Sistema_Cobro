@@ -6,7 +6,7 @@
             <div class="card mb-3">
                 <div class="card-header">Recibos</div>
                 <div class="card-body">
-                    <form id="reciboForm" action="" method="POST">
+                    <form id="reciboForm" action="?controlador=ventas&accion=guardar" method="POST">
                         <!-- Campo para escanear el código de barras -->
                         <div class="mb-2">
                             <label for="barcodeInput" class="form-label me-2">Escanear Código de Barras:</label>
@@ -17,7 +17,10 @@
                         <!-- Campo para el monto del recibo (rellenado automáticamente) -->
                         <input type="hidden" id="monto_recibo">
                         <input type="hidden" id="no_cliente">
-                        <input type="hidden" name="recibos" id="recibos_hidden">
+                        <!-- input para el array recibos -->
+                        <input type="hidden" name="recibos" id="recibos_hidden"> 
+                        <!-- input para el array clientes -->
+                        <input type="hidden" name="clientes" id="clientes_hidden"> 
                         <input type="hidden" name="total_recibos" id="total_recibos_hidden">
                     </form>
                 </div>
@@ -73,4 +76,4 @@
     </div>
 </div>
 
-<script src="public/js/venta_crear_as.js"></script>
+<script src="public/js/venta_crear_f.js"></script>

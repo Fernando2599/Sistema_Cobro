@@ -1,6 +1,9 @@
 <?php
 
 include_once("backend/modelos/ventas.php");
+include_once("backend/modelos/clientes.php");
+include_once("backend/modelos/periodos.php");
+include_once("backend/modelos/clientes_has_periodos.php");
 include_once("backend/modelos/cortes.php");
 include_once("conexion.php");
 
@@ -43,8 +46,13 @@ class ControladorVentas {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Obtiene los datos enviados
             $recibos = isset($_POST['recibos']) ? json_decode($_POST['recibos'], true) : null;
+            $servicios = isset($_POST['clientes']) ? json_decode($_POST['clientes'], true) : null;
             $total_recibos = isset($_POST['total_recibos']) ? $_POST['total_recibos'] : null;
-            if ($recibos && $total_recibos !== null) {
+
+            print_r($recibos);
+            print_r($servicios);
+            print_r($total_recibos);
+            if ($recibos && $total_recibos && $servicios !== null) {
 
                 date_default_timezone_set('America/Mexico_City');
                 $fecha = date('Y-m-d');
@@ -53,37 +61,68 @@ class ControladorVentas {
                 if (isset($_SESSION['id'])) {
                     $user_id = $_SESSION['id'];
 
-                    try {
-                        // Inicia una transacción
-                        $conexionBD = BD::crearInstancia();
-                        $conexionBD->beginTransaction();
-
-                        // Guardar la venta usando el modelo Ventas
-                        $venta_id = Ventas::guardarVentas($fecha, $hora, $total_recibos, $user_id);
-
-                        // Guardar los recibos
-                        foreach ($recibos as $monto_recibo) {
-                            Ventas::guardarRecibo($fecha, $hora, $monto_recibo, $venta_id);
+                    // Validar que todos los clientes existen en la base de datos
+                    $todos_existen = true;
+                    $cliente_ids = [];
+                
+                    foreach ($servicios as $no_servicio) {
+                        $cliente_id = Clientes::obtenerIdPorNumeroServicio($no_servicio);
+                        if (!$cliente_id) {
+                            $todos_existen = false;
+                            break; // Salir del bucle si algún cliente no existe
                         }
-
-                        // Confirmar la transacción
-                        $conexionBD->commit();
-
-                        // Redirección después de guardar todo correctamente
-                        
-                        header("Location: ./?controlador=ventas&accion=crear");
-                        exit(); 
-
-                    } catch (Exception $e) {
-                        // Revertir la transacción si ocurre un error
-                        $conexionBD->rollBack();
-                        echo json_encode(['success' => false, 'error' => 'Error al guardar en la base de datos']);
-                        return;
+                        $cliente_ids[] = $cliente_id; // Almacenar el ID del cliente
                     }
 
-                    // Devuelve una respuesta JSON
-                    echo json_encode(['success' => true]);
-                    return; // Salir del método después de la operación exitosa
+                    if ($todos_existen) {
+                        $ultimo_periodo_id = Periodos::obtenerUltimoPeriodo();
+                         
+
+                        try {
+                            // Inicia una transacción
+                            $conexionBD = BD::crearInstancia();
+                            $conexionBD->beginTransaction();
+    
+                            // Guardar la venta usando el modelo Ventas
+                            $venta_id = Ventas::guardarVentas($fecha, $hora, $total_recibos, $user_id);
+    
+                            // Guardar los recibos y asociar con clientes_has_periodos
+                            foreach ($recibos as $index => $monto_recibo) {
+                                $cliente_id = $cliente_ids[$index];
+                                $clientes_has_periodos_id = ClientesHasPeriodos::obtenerId($cliente_id, $ultimo_periodo_id);
+                                if ($clientes_has_periodos_id) {
+                                    Ventas::guardarRecibo($fecha, $hora, $monto_recibo, $venta_id, $clientes_has_periodos_id);
+
+                                    Periodos::actualizarEstado($ultimo_periodo_id, $cliente_id);
+                                } else {
+                                    // Manejar caso si no se encuentra el ID en clientes_has_periodos
+                                    throw new Exception("No se encontró el ID en clientes_has_periodos para cliente_id: $cliente_id");
+                                }
+                            }
+    
+                            // Confirmar la transacción
+                            $conexionBD->commit();
+    
+                            // Redirección después de guardar todo correctamente
+                            
+                            header("Location: ./?controlador=ventas&accion=crear");
+                            exit(); 
+    
+                        } catch (Exception $e) {
+                            // Revertir la transacción si ocurre un error
+                            $conexionBD->rollBack();
+                            echo json_encode(['success' => false, 'error' => 'Error al guardar en la base de datos'. $e->getMessage()]);
+                            return;
+                        }
+    
+                        // Devuelve una respuesta JSON
+                        echo json_encode(['success' => true]);
+                        return; // Salir del método después de la operación exitosa
+
+                            
+                    }
+
+                    
                 } else {
                     echo json_encode(['success' => false, 'error' => 'Usuario no autenticado']);
                 }

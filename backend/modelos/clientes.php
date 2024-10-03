@@ -33,22 +33,36 @@ class Clientes {
     }
 
 
-
+    //consulta inicial sin filtrado
     public static function consultarClientesPaginados($offset, $limit) {
         $conexionBD = BD::crearInstancia();
-        $sql = $conexionBD->prepare("SELECT * FROM clientes LIMIT :offset, :limit");
+        
+        // Consulta con ordenamiento alfabético por nombres, ap_pat y ap_mat
+        $sql = $conexionBD->prepare("
+            SELECT * FROM clientes 
+            ORDER BY ap_pat ASC
+            LIMIT :offset, :limit
+        ");
+        
+        // Asociamos los parámetros para la paginación
         $sql->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
         $sql->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        
+        // Ejecutamos la consulta
         $sql->execute();
+        
+        // Recogemos los resultados
         $clientes = [];
         foreach ($sql->fetchAll() as $cliente) {
             $clientes[] = new Clientes($cliente['id'], $cliente['numero_servicio'], $cliente['nombres'], $cliente['ap_pat'], $cliente['ap_mat'], $cliente['direccion']);
         }
+        
         return $clientes;
     }
+    
 
     // Función para consultar clientes filtrados con paginación
-    public static function consultarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null, $inicio = 0, $registros_por_pagina = 10) {
+    public static function consultarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null, $inicio = 0, $registros_por_pagina = 45) {
         $lista_clientes = [];
         $conexionBD = BD::crearInstancia();
         
@@ -61,15 +75,21 @@ class Clientes {
             $sql_query .= " AND nombres LIKE ?";
             $params[] = "%$nombres%";
         }
+        
+        // Filtro exacto para ap_pat
         if ($ap_pat) {
-            $sql_query .= " AND ap_pat LIKE ?";
-            $params[] = "%$ap_pat%";
+            $sql_query .= " AND ap_pat = ?";
+            $params[] = $ap_pat; // Búsqueda exacta
         }
+    
         if ($ap_mat) {
             $sql_query .= " AND ap_mat LIKE ?";
             $params[] = "%$ap_mat%";
         }
-
+        
+        // Ordenar por apellido paterno de forma ascendente
+        $sql_query .= " ORDER BY ap_pat ASC";
+    
         // Añadir paginación
         $sql_query .= " LIMIT $inicio, $registros_por_pagina";
         
@@ -80,17 +100,18 @@ class Clientes {
         foreach ($params as $key => $value) {
             $sql->bindValue($key + 1, $value);
         }
-
+    
         // Ejecutar la consulta
         $sql->execute();
-
+    
         // Recoger los resultados
-        foreach($sql->fetchAll() as $cliente) {
+        foreach ($sql->fetchAll() as $cliente) {
             $lista_clientes[] = new Clientes($cliente['id'], $cliente['numero_servicio'], $cliente['nombres'], $cliente['ap_pat'], $cliente['ap_mat'], $cliente['direccion']);
         }
-
+    
         return $lista_clientes;
-    }   
+    }
+    
 
     // Función para contar clientes filtrados
     public static function contarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null) {

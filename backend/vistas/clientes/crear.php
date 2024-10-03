@@ -34,5 +34,5 @@
         </form>
     </div>
 </div>
-<script src="public/js/clientes.js"></script>
+
 <script src="public/js/registrar_cliente.js"></script>

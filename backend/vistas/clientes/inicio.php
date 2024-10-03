@@ -96,3 +96,4 @@
 
     </div>
 </div>
+<script src="public/js/clientes.js"></script>

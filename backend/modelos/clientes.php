@@ -137,6 +137,18 @@ class Clientes {
         
         return $cliente ? $cliente['id'] : null;
     }
+    // Método para actualizar los datos de un cliente
+    public static function actualizarCliente($id, $numero_servicio, $nombres, $ap_pat, $ap_mat, $direccion) {
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("UPDATE clientes SET numero_servicio =?, nombres =?, ap_pat =?, ap_mat =?, direccion =? WHERE id =?");
+        $sql->execute(array($numero_servicio, $nombres, $ap_pat, $ap_mat, $direccion, $id));
+    }
+    // Método para eliminar un cliente
+    public static function eliminarCliente($id) {
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("DELETE FROM clientes WHERE id =?");
+        $sql->execute(array($id));
+    }
     
 }
 ?>

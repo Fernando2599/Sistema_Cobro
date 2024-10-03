@@ -83,10 +83,10 @@ class ControladorClientes{
         if ($_GET) {
             try {
                 $id = $_GET['id'];
-                User::borrar($id);
-                header("Location:./?controlador=user&accion=inicio&success=Usuario eliminado correctamente.");
+                Clientes::eliminarCliente($id);
+                header("Location:./?controlador=clientes&accion=inicio&exitoso=Usuario eliminado correctamente.");
             } catch (Exception $e) {
-                header("Location:./?controlador=user&accion=inicio&error=Error al eliminar el usuario: " . $e->getMessage());
+                header("Location:./?controlador=clientes&accion=inicio&error=Error al eliminar el usuario: " . $e->getMessage());
             }
             exit();
         }

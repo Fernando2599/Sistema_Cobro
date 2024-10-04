@@ -19,7 +19,7 @@
                 <input type="text" class="form-control" name="ap_pat" id="ap_pat" placeholder="Ingrese el apellido parterno" maxlength="40" required />
                 <label for="" class="form-label">Apellido Materno:</label>
 
-                <input type="text" class="form-control" name="ap_mat" id="ap_mat" placeholder="Ingrese el apellido materno" maxlength="40" required />
+                <input type="text" class="form-control" name="ap_mat" id="ap_mat" placeholder="Ingrese el apellido materno" maxlength="40"/>
 
                 <label for="" class="form-label">No. de servicio:</label>
 

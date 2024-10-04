@@ -37,8 +37,10 @@ class ControladorPeriodos{
             echo "ID de cliente no proporcionado.";
         }
     }
-    
-    
+
+    public function ActualizarMonto(){
+        include_once("backend/vistas/periodos/actualizar_monto.php");
+    }    
 
 }
 ?>

@@ -40,6 +40,7 @@
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'ventas' && ($_GET['accion'] ?? '') === 'informacion' ? 'active' : '' ?>" href="?controlador=ventas&accion=informacion"><i class="bi bi-cash-stack"></i> Información de Venta</a>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'depositos' && ($_GET['accion'] ?? '') === 'crear' ? 'active' : '' ?>" href="?controlador=depositos&accion=crear"><i class="bi bi-bank"></i> Depositos</a>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'depositos' && ($_GET['accion'] ?? '') === 'reportes' ? 'active' : '' ?>" href="?controlador=depositos&accion=reportes"><i class="bi bi-file-earmark-text"></i> Reportes</a>
+                    <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'clientes' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=clientes&accion=inicio"><i class="bi bi-people-fill"></i> Clientes</a>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'iniciar' && ($_GET['accion'] ?? '') === 'logout' ? 'active' : '' ?>" href="?controlador=iniciar&accion=logout"><i class="bi bi-box-arrow-right"></i> Salir</a>
                 <?php elseif ($_SESSION['rol_id'] == '2'): ?>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'paginas' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=paginas&accion=inicio"><i class="bi bi-house"></i> Inicio</a>

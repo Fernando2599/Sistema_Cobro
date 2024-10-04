@@ -50,13 +50,16 @@
                                     <i class="bi bi-eye"></i>
                                 </a>
 
-                                <a href="?controlador=clientes&accion=editar&id=<?php echo htmlspecialchars($cliente->id); ?>" class="btn btn-info">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-
-                                <a href="?controlador=clientes&accion=borrar&id=<?php echo htmlspecialchars($cliente->id); ?>" class="btn btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                <?php if ($_SESSION['rol_id'] == '2'): ?>
+                                    <a href="?controlador=clientes&accion=editar&id=<?php echo htmlspecialchars($cliente->id); ?>" class="btn btn-info">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                <?php endif; ?>
+                                <?php if ($_SESSION['rol_id'] == '2'): ?>
+                                    <a href="?controlador=clientes&accion=borrar&id=<?php echo htmlspecialchars($cliente->id); ?>" class="btn btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este registro?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         </td>
                     </tr>

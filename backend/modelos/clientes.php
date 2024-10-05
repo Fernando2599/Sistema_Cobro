@@ -170,6 +170,15 @@ class Clientes {
         $sql = $conexionBD->prepare("DELETE FROM clientes WHERE id =?");
         $sql->execute(array($id));
     }
+
+    public static function obtenerDatosPorNumero($numeroCliente) {
+        $conexionBD = BD::crearInstancia();
+        $sql = "SELECT nombres, ap_pat, ap_mat FROM clientes WHERE numero_servicio = :numeroCliente";
+        $stmt = $conexionBD->prepare($sql);
+        $stmt->bindParam(':numeroCliente', $numeroCliente, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     
 }
 ?>

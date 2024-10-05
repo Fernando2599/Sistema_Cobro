@@ -9,7 +9,7 @@ class ControladorClientes{
     public function inicio() {
         // Parámetros de la paginación
         $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-        $registros_por_pagina = 45;
+        $registros_por_pagina = 50;
         $offset = ($pagina_actual - 1) * $registros_por_pagina;
     
         // Parámetros de filtrado

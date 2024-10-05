@@ -2,7 +2,7 @@
     <div class="card-header">Datos del cliente</div>
     <div class="card-body">
                     
-        <form action="" method="post">
+        <form id="datosForm" action="" method="post">
             <div class="mb-3">
                 <div class="mb-2">
                     <label for="barcodeInput" class="form-label me-2">Escanear Código de Barras:</label>
@@ -27,7 +27,7 @@
 
                 <label for="" class="form-label">Monto:</label>
 
-                <input type="text" class="form-control" name="monto_pago" id="no_servicio" placeholder="Ingrese el no. de servicio" maxlength="6" readonly />
+                <input type="text" class="form-control" name="monto_pago" id="monto_pago" placeholder="Ingrese el no. de servicio" maxlength="6" readonly />
 
             </div>  
             <input name="" id="" class="btn btn-success" type="submit" value="Agregar Cliente"/>
@@ -39,4 +39,4 @@
     </div>
 </div>
 
-<script src="public/js/registrar_cliente.js"></script>
+<script src="public/js/actualizar_m.js"></script>

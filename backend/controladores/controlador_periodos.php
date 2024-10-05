@@ -1,5 +1,6 @@
 <?php
 include_once("backend/modelos/periodos.php");
+include_once("backend/modelos/clientes.php");
 include_once("conexion.php");
 
 class ControladorPeriodos{
@@ -39,8 +40,29 @@ class ControladorPeriodos{
     }
 
     public function ActualizarMonto(){
+        if (isset($_POST['nombre']) && isset($_POST['no_servicio']) && isset($_POST['monto_pago'])) {
+            $nombre = $_POST['nombre'];
+            $no_servicio = $_POST['no_servicio'];
+            $monto_pago = $_POST['monto_pago'];
+            $cliente_id = Clientes::obtenerIdPorNumeroServicio($no_servicio);
+            $id_periodo_actual = Periodos::obtenerUltimoPeriodo();
+
+            try {
+                Periodos::actualizarMonto($cliente_id, $monto_pago, $id_periodo_actual);
+                header("Location: ./?controlador=periodos&accion=ActualizarMonto&success=El cliente ha sido registrado correctamente.");
+            } catch (Exception $e) {
+                // Redireccionar con mensaje de error
+                header("Location: ./?controlador=periodos&accion=ActualizarMonto&error=Ocurrió un error al registrar al cliente: " . $e->getMessage());
+            }
+            
+        }
         include_once("backend/vistas/periodos/actualizar_monto.php");
-    }    
+    } 
+
+    public function obtenerDatosCliente($numeroCliente) {
+        return Clientes::obtenerDatosPorNumero($numeroCliente);
+        
+    }
 
 }
 ?>

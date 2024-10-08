@@ -5,21 +5,27 @@ include_once("conexion.php");
 class ControladorCortes{
 
     public function crear(){
+        
+        date_default_timezone_set('America/Mexico_City');
+        $fecha = date('Y-m-d');
+        $hora = date('H:i:s');
+        // Calcula el total de ventas del día
+        $total_ventas = Ventas::calcularTotalVentas($fecha);
+        // Calcula el total de cortes al día
+        $total_cortes = Cortes::calcularTotalCortes($fecha);
+        //Calcula la suma total de talonarios registrados en los cortes
+        $sum_talon = Cortes::consultarTalonariosEnCorte($fecha);
+        //Calcula la cantidad de talonarios
+        $count_talon = Ventas::CalcularTotalDeTalonarios($fecha);
+
+        $monto_disponible = $total_ventas - $total_cortes;
+        $talonarios_disponibles = $count_talon - $sum_talon;
+
         if(isset($_POST['monto_corte'])){
-            date_default_timezone_set('America/Mexico_City');
-            $fecha = date('Y-m-d');
-            $hora = date('H:i:s'); 
+             
             $corte_cantidad = $_POST['monto_corte']; // obteniendo datos del form
             $talon_cant= $_POST['talonarios']; // obteniendo datos del form
-    
-            // Calcula el total de ventas del día
-            $total_ventas = Ventas::calcularTotalVentas($fecha);
-            // Calcula el total de cortes al día
-            $total_cortes = Cortes::calcularTotalCortes($fecha);
-            //Calcula la suma total de talonarios registrados en los cortes
-            $sum_talon = Cortes::consultarTalonariosEnCorte($fecha);
-            //Calcula la cantidad de talonarios
-            $count_talon = Ventas::CalcularTotalDeTalonarios($fecha);
+            
 
     
             if (($corte_cantidad > ($total_ventas - $total_cortes)) || ($talon_cant > ($count_talon - $sum_talon))) {

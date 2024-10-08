@@ -6,19 +6,21 @@ class Cortes{
     public $talonarios;
     public $fecha;
     public $hora;
+    public $faltante;
 
-    public function __construct($id, $corte_cantidad, $talonarios, $fecha, $hora){
+    public function __construct($id, $corte_cantidad, $talonarios, $fecha, $hora, $faltante = null){
         $this->id = $id;
         $this->corte_cantidad = $corte_cantidad;
         $this->talonarios = $talonarios;
         $this->fecha = $fecha;
         $this->hora = $hora;
+        $this->faltante = $faltante;
     }
 
-    public static function guardarCortes($corte_cantidad, $talonarios, $fecha, $hora){
+    public static function guardarCortes($corte_cantidad, $talonarios, $fecha, $hora, $faltante){
         $conexionBD = BD::crearInstancia();
-        $sql = $conexionBD->prepare("INSERT INTO corte(corte_cantidad, talonarios, fecha, hora) VALUES(?,?,?,?)");
-        $sql->execute(array($corte_cantidad, $talonarios, $fecha, $hora));
+        $sql = $conexionBD->prepare("INSERT INTO corte(corte_cantidad, talonarios, fecha, hora, faltante) VALUES(?,?,?,?,?)");
+        $sql->execute(array($corte_cantidad, $talonarios, $fecha, $hora, $faltante));
     }
 
     public static function consultarRegistros($fecha_consulta = null){
@@ -85,6 +87,26 @@ class Cortes{
         $sql->execute(array($id));
         $corte = $sql->fetch();
         return new Cortes ($corte['id'], $corte['corte_cantidad'], $corte['talonarios'],$corte['fecha'], $corte['hora']);
+    }
+    public static function consultarFaltante1($fecha){
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("SELECT faltante FROM corte WHERE fecha =?");
+        $sql->execute(array($fecha));
+    }
+    public static function consultarFaltante($fecha) {
+        // Simulación de consulta a la base de datos
+        $conexionBD = BD::crearInstancia();
+        $sql = $conexionBD->prepare("SELECT faltante FROM corte WHERE fecha = :fecha");
+        $sql->execute(['fecha' => $fecha]);
+        $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+
+        if ($resultado) {
+            $corte = new stdClass();
+            $corte->faltante = $resultado['faltante'];
+            return $corte;
+        } else {
+            return null;
+        }
     }
 
 }

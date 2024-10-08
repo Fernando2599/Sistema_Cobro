@@ -9,11 +9,11 @@
                     <thead>
                         <tr>
                             <th scope="col">Reporte</th>
-                            <th scope="col">Reporte creado el</th>
-                            <th scope="col">Reporte creado a las</th>
+                            <th scope="col">Reporte creado</th>
+                            
                             <th scope="col">Fechas a depositar</th>
                             <th scope="col">Talonarios</th>
-                            <th scope="col">Monto total del deposito</th>
+                            <th scope="col">Monto del deposito</th>
                             <th scope="col">Efectivo</th>
 
                             <?php if ($_SESSION['rol_id'] == '1'): ?>
@@ -25,17 +25,18 @@
                         <?php foreach ($reportes as $reporte) { ?>
                         <tr>
                             <td>No. <?php echo $reporte->id; ?></td>
-                            <td><?php echo $reporte->fecha; ?></td>
-                            <td><?php echo $reporte->hora; ?></td>
+                            <td><?php echo $reporte->fecha;?></td>
+                            
                             <td>
                                 <ul>
-                                    <?php foreach ($reporte->fechas_venta as $fecha_venta) { ?>
-                                    <li><?php echo $fecha_venta; ?></li>
+                                    <?php foreach ($reporte->fechas_venta as $index => $fecha_venta) { ?>
+                                    <li><?php echo $fecha_venta . " - Faltante: " . $reporte->faltante[$index]; ?></li>
                                     <?php } ?>
                                 </ul>
                             </td>
                             <td><?php echo $reporte->conteo_registros; ?></td>
                             <td><?php echo $reporte->total_efectivo; ?></td>
+                            
                             <td><?php echo $reporte->conteo_efectivo; ?></td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Button group name">

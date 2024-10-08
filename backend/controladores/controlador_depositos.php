@@ -1,6 +1,7 @@
 <?php
 include_once("conexion.php");
 include_once("backend/modelos/depositos.php");
+include_once("backend/modelos/cortes.php");
 
 class ControladorDepositos {
     
@@ -49,10 +50,35 @@ class ControladorDepositos {
         include_once("backend/vistas/depositos/crear.php");
     }
 
-    public function reportes(){
-        $reportes = (Depositos::informacionReporte());
+    public function reportes() {
+        $reportes = Depositos::informacionReporte();
+    
+        if (!empty($reportes)) {
+            foreach ($reportes as $reporte) {
+                if (isset($reporte->fechas_venta)) {
+                    foreach ($reporte->fechas_venta as $fecha) {
+                        $corte_dia = Cortes::consultarFaltante($fecha);
+                        if (isset($corte_dia->faltante)) {
+                            $reporte->faltante[] = $corte_dia->faltante;
+                        } else {
+                            $reporte->faltante[] = "No disponible";
+                        }
+                    }
+                }
+            }
+    
+            // Depuración
+            //foreach ($reportes as $reporte) {
+              //  var_dump($reporte->faltante); // Verifica el contenido de faltante
+            //}
+        } else {
+            echo "No hay datos disponibles para generar el reporte.";
+        }
+    
         include_once("backend/vistas/depositos/reporte.php");
     }
+    
+    
 
     public function editarReporte(){
         if(isset($_POST['monto_efectivo'])) {

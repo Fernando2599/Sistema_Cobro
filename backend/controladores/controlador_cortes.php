@@ -5,7 +5,7 @@ include_once("conexion.php");
 class ControladorCortes{
 
     public function crear(){
-        
+
         date_default_timezone_set('America/Mexico_City');
         $fecha = date('Y-m-d');
         $hora = date('H:i:s');
@@ -34,7 +34,9 @@ class ControladorCortes{
                 exit(); // Detener la ejecución del script
             } else {
                 // Guardar el corte
-                Cortes::guardarCortes($corte_cantidad,$talon_cant, $fecha, $hora);
+                $faltante =  $monto_disponible - $corte_cantidad;
+
+                Cortes::guardarCortes($corte_cantidad, $talon_cant, $fecha, $hora, $faltante);
                 // Redireccionar con mensaje de éxito
                 header("Location: ./?controlador=cortes&accion=crear&exitoso=El corte ha sido registrado correctamente.");
                 exit();

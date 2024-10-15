@@ -57,26 +57,24 @@ class ControladorClientes{
 
     public function editar() {
 
-        if($_POST){
-            $id=$_GET['id'];
-            $username = $_POST['username'];
-            $password = $_POST['pass'];
-            date_default_timezone_set('America/Mexico_City');
-            $updated_at = date('Y-m-d H:i:s');
-            $rol = $_POST['rol'];
-
+        if ($_POST) {
+            $id_cliente = $_GET['id'];
+            $cliente = $_POST['idCliente'];
+            $id_cliente_has_periodo = $_POST['idClientehasPeriodos'];
             try {
-                User::editar($id, $username, $password, $updated_at, $rol);
-                header("Location:./?controlador=user&accion=editar&id=".$id."&success=Datos actualizados correctamente");
+                Clientes::CancelarVenta($cliente);
+                Clientes::EliminarRecibo($id_cliente_has_periodo);
+                header("Location:./?controlador=clientes&accion=editar&id=".$id_cliente."&exitoso=Venta eliminada correctamente.");
             } catch (Exception $e) {
-                header("Location:./?controlador=user&accion=editar&id=".$id."&success=Error al actualizar los datos". $e->getMessage());
+                header("Location:./?controlador=clientes&accion=editar&id=".$id_cliente."&error=Error al eliminar venta: " . $e->getMessage());
             }
-
-            
+            exit();
         }
-        $id=$_GET['id'];
-        $user=User::buscar($id);
-        include_once("backend/vistas/user/editar.php");
+        include_once("backend/vistas/clientes/editar.php");
+    }
+
+    public function obtenerDatosCliente($idCliente) {
+        return Clientes::ObtenerEstadoPago($idCliente);
     }
 
     public function borrar() {

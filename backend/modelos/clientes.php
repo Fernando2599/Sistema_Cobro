@@ -179,6 +179,30 @@ class Clientes {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public static function ObtenerEstadoPago($idCliente){
+        $conexionBD = BD::crearInstancia();
+        $sql = "SELECT c.numero_servicio, c.nombres, c.ap_pat, c.ap_mat, ch.id, ch.clientes_id, ch.estado FROM clientes c INNER JOIN clientes_has_periodos ch on c.id = ch.clientes_id WHERE c.id = :idCliente";
+        $stmt = $conexionBD->prepare($sql);
+        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function CancelarVenta($id_cliente){
+        $conexionBD = BD::crearInstancia();
+        $sql = "UPDATE clientes_has_periodos SET estado = 'no pagado' WHERE clientes_id = :id_cliente";
+        $stmt = $conexionBD->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+    public static function EliminarRecibo($id_cliente_has_periodo){
+        $conexionBD = BD::crearInstancia();
+        $sql = "DELETE FROM recibo WHERE clientes_has_periodos_id = :id_cliente_has_periodo";
+        $stmt = $conexionBD->prepare($sql);
+        $stmt->bindParam(':id_cliente_has_periodo', $id_cliente_has_periodo, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
     
 }
 ?>

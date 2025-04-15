@@ -52,7 +52,7 @@ class ControladorVentas {
             print_r($recibos);
             print_r($servicios);
             print_r($total_recibos);
-            if ($recibos && $total_recibos && $servicios !== null) {
+            if ($recibos !== null && $total_recibos !== null && $servicios !== null) {
 
                 date_default_timezone_set('America/Mexico_City');
                 $fecha = date('Y-m-d');
@@ -128,7 +128,7 @@ class ControladorVentas {
                 }
             } else {
                 // Error en el JSON recibido
-                echo json_encode(['success' => false, 'error' => 'Datos no válidos']);
+                echo json_encode(['success' => false, 'error' => 'verificar recibo en cero']);
             }
         } else {
             echo json_encode(['success' => false, 'error' => 'Solicitud no válida']);

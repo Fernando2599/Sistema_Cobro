@@ -78,7 +78,7 @@ function processBarcode(barcode) {
                 document.getElementById('ap_mat').value = data.ap_mat;
 
                 // Muestra un mensaje o notifica que los datos han sido cargados
-                showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
+                //showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
 
                 // Establece el valor del input y agrega el recibo
                 document.getElementById('monto_recibo').value = costoBarcode;
@@ -115,7 +115,7 @@ function addRecibo() {
 
    
 
-    if (montoRecibo === "" || noCliente === "" || nombres === "" || apPat === "" || apMat === "") {
+    if (montoRecibo === "" || noCliente === "" || nombres === "" || apPat === "") {
         showAlert('Verifique que los datos no esten vacíos', 'warning');
         return;
     }

@@ -46,7 +46,7 @@ function processBarcode(barcode) {
 
     if (barcode.length === 30) {
         const identificadorInicial = barcode.substring(0, 2);
-        const numeroCliente = barcode.substring(2, 14);
+        const numeroCliente = barcode.substring(2, 14).trim();
         const fecha = barcode.substring(14, 20);
         const costo = barcode.substring(20, 29);
         const identificadorFinal = barcode.substring(29);
@@ -78,7 +78,7 @@ function processBarcode(barcode) {
                 document.getElementById('ap_mat').value = data.ap_mat;
 
                 // Muestra un mensaje o notifica que los datos han sido cargados
-                //showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
+                showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
 
                 // Establece el valor del input y agrega el recibo
                 document.getElementById('monto_recibo').value = costoBarcode;

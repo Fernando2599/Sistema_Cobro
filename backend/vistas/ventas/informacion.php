@@ -24,6 +24,7 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Hora</th>
                             <th scope="col">Precio del recibo</th>
+                            <th scope="col">Cliente</th>
                             <?php if ($_SESSION['rol_id'] == '2'): ?>
                                 <th scope="col">Accion</th>
                             <?php endif;?>
@@ -36,6 +37,7 @@
                                 <td><?php echo $info->fecha; ?></td>
                                 <td><?php echo $info->hora; ?></td>
                                 <td><?php echo $info->monto_recibo; ?></td>
+                                <td><?php echo $info->nombres . ' ' . $info->ap_pat . ' ' . $info->ap_mat; ?></td>
                                 
                                 <?php if ($_SESSION['rol_id'] == '2'):?>
                                 <td>

@@ -8,12 +8,18 @@ class Ventas{
     public $user_id;
     public $monto_recibo;
     public $clientes_has_periodos; // Nuevo atributo
+    public $nombres;
+    public $ap_pat;
+    public $ap_mat;
 
-    public function __construct($id, $fecha, $hora, $user_id, $monto_recibo = null, $clientes_has_periodos = null) {
+    public function __construct($id, $fecha, $hora, $user_id, $nombres = null, $ap_pat = null, $ap_mat = null, $monto_recibo = null, $clientes_has_periodos = null) {
         $this->id = $id;
         $this->fecha = $fecha;
         $this->hora = $hora;
         $this->user_id = $user_id;
+        $this->nombres = $nombres;
+        $this->ap_pat = $ap_pat;
+        $this->ap_mat = $ap_mat;
         $this->monto_recibo = $monto_recibo;
         $this->clientes_has_periodos = $clientes_has_periodos; // Inicializa el nuevo atributo
     }
@@ -35,21 +41,48 @@ class Ventas{
     }
 
     public static function consultarRegistros($fecha_consulta){
-        
-        $lista_ventas=[]; 
+        $lista_ventas = []; 
         $conexionBD = BD::crearInstancia();
-
-        // mañana lunes modificar la consulta para poder consultar a base de la fecha del dia
-        $sql = $conexionBD->prepare("SELECT * FROM recibo WHERE fecha=?");
+    
+        // Consulta con JOIN para obtener los datos del cliente
+        $sql = $conexionBD->prepare("
+            SELECT 
+                r.id, r.fecha, r.hora, r.monto_recibo,
+                c.nombres, c.ap_pat, c.ap_mat
+            FROM 
+                recibo r
+            INNER JOIN 
+                clientes_has_periodos chp ON r.clientes_has_periodos_id = chp.id
+            INNER JOIN 
+                clientes c ON chp.clientes_id = c.id
+            WHERE 
+                r.fecha = ?
+        ");
+    
         $sql->execute(array($fecha_consulta));
         
         foreach($sql->fetchAll() as $informacion){
-            // Crear instancia de la clase Ventas con la nueva propiedad
-            $venta = new Ventas($informacion['id'], $informacion['fecha'], $informacion['hora'], null, $informacion['monto_recibo']);
+            // Armar el nombre completo del cliente
+            $nombre_cliente = $informacion['nombres'] . ' ' . $informacion['ap_pat'] . ' ' . $informacion['ap_mat'];
+    
+            // Crear instancia de la clase Ventas
+            $venta = new Ventas(
+                $informacion['id'],
+                $informacion['fecha'],
+                $informacion['hora'],
+                null,
+                $informacion['nombres'],
+                $informacion['ap_pat'],
+                $informacion['ap_mat'],
+                $informacion['monto_recibo']
+            );
+    
             $lista_ventas[] = $venta;
         }
+    
         return $lista_ventas;
     }
+    
 
     // Método para calcular el total de ventas para una fecha dada
     public static function calcularTotalVentas($fecha) {

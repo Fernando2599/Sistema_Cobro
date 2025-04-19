@@ -11,7 +11,7 @@ class BD
 
             $opcionesPDO[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 
-                self::$instancia = new PDO('mysql:host=localhost;dbname=cfe_test','root','1234',$opcionesPDO);
+                self::$instancia = new PDO('mysql:host=localhost;dbname=cfe','root','1234',$opcionesPDO);
     
             }
             return self::$instancia;

@@ -61,6 +61,7 @@ class ControladorClientes{
             $id_cliente = $_GET['id'];
             $cliente = $_POST['idCliente'];
             $id_cliente_has_periodo = $_POST['idClientehasPeriodos'];
+            $ultimo_periodo_id = Periodos::obtenerUltimoPeriodo();
             try {
                 Clientes::CancelarVenta($cliente);
                 Clientes::EliminarRecibo($id_cliente_has_periodo);
@@ -71,6 +72,23 @@ class ControladorClientes{
             exit();
         }
         include_once("backend/vistas/clientes/editar.php");
+    }
+    public function editar2() {
+        if (isset($_GET['id']) && !empty($_GET['id'])) {
+            $id_cliente = $_GET['id'];
+
+            // Obtener el historial de pagos para el cliente
+            $historial = Periodos::historialPagos($id_cliente);
+
+            // Obtener el nombre del cliente para pasarlo a la vista
+            $nombre_cliente = Periodos::obtenerNombreCliente($id_cliente);
+            $monto_pagos = Periodos::obtenerNombreCliente($id_cliente);
+
+            // Incluir la vista y pasar el historial
+            include_once("backend/vistas/periodos/historial.php");
+        } else {
+            echo "ID de cliente no proporcionado.";
+        }
     }
 
     public function obtenerDatosCliente($idCliente) {

@@ -8,10 +8,10 @@ include_once("backend/controladores/controlador_periodos.php");
 
 header('Content-Type: application/json'); // Asegura que la respuesta sea JSON
 
-if (isset($_POST['numeroCliente'])) {
-    $numeroCliente = $_POST['numeroCliente'];
+if (isset($_POST['idCliente'])) {
+    $idCliente = $_POST['idCliente'];
     $controlador = new ControladorPeriodos();
-    $datosCliente = $controlador->obtenerDatosCliente($numeroCliente);
+    $datosCliente = $controlador->obtenerDatosCliente($idCliente);
     
     if ($datosCliente) {
         echo json_encode($datosCliente);

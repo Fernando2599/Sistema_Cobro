@@ -179,11 +179,12 @@ class Clientes {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public static function ObtenerEstadoPago($idCliente){
+    public static function ObtenerEstadoPago($idCliente, $idUltimoPeriodo){
         $conexionBD = BD::crearInstancia();
-        $sql = "SELECT c.numero_servicio, c.nombres, c.ap_pat, c.ap_mat, ch.id, ch.clientes_id, ch.estado FROM clientes c INNER JOIN clientes_has_periodos ch on c.id = ch.clientes_id WHERE c.id = :idCliente";
+        $sql = "SELECT c.numero_servicio, c.nombres, c.ap_pat, c.ap_mat, ch.id, ch.clientes_id, ch.estado , ch.periodos_id , ch.monto_pago FROM clientes c INNER JOIN clientes_has_periodos ch on c.id = ch.clientes_id WHERE c.id = :idCliente AND ch.periodos_id = :idUltimoPeriodo";
         $stmt = $conexionBD->prepare($sql);
         $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_STR);
+        $stmt->bindParam(':idUltimoPeriodo', $idUltimoPeriodo, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

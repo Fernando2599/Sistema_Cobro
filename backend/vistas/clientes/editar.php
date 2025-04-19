@@ -8,6 +8,7 @@
                     
                     <input type="hidden" class="form-control" id="idCliente" name="idCliente" value="<?php echo $_GET['id']; ?>">
                     <input type="hidden" class="form-control" id="idClientehasPeriodos" name="idClientehasPeriodos" value="<?php echo $_GET['id']; ?>">
+                    <input type="hidden" class="form-control" id="idUltimoPeriodo" name="idUltimoPeriodo" value="<?php echo $idUltimoPeriodo; ?>">
 
                 </div>
                 
@@ -26,6 +27,10 @@
 
                 <input type="text" class="form-control" name="no_servicio" id="no_servicio" placeholder="Ingrese el no. de servicio" maxlength="30" readonly />
 
+                <label for="" class="form-label">Monto:</label>
+
+                <input type="text" class="form-control" name="monto_pago" id="monto_pago" placeholder="Ingrese el monto"/>
+
                 <label for="" class="form-label">Estado:</label>
 
                 <input type="text" class="form-control" name="estado" id="estado" placeholder="Ingrese el no. de servicio"/>
@@ -40,4 +45,4 @@
     </div>
 </div>
 
-<script src="public/js/actualizar_datos_cliente.js"></script>
+<script src="public/js/actualizar_datos_client.js"></script>

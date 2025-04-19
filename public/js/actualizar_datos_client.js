@@ -31,6 +31,7 @@ function processClient() {
             document.getElementById('no_servicio').value = data[0].numero_servicio;
             document.getElementById('estado').value = data[0].estado;
             document.getElementById('idClientehasPeriodos').value = data[0].id;
+            document.getElementById('monto_pago').value = data[0].monto_pago;
             
         } else {
             showAlert('No se encontraron datos para el cliente.', 'error');

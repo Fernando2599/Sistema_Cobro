@@ -1,5 +1,6 @@
 let recibos = [];
 let clientes = [];
+let infoclientes = [];
 let barcodeBuffer = '';
 
 
@@ -59,10 +60,39 @@ function processBarcode(barcode) {
         console.log("Costo: " + costoBarcode);
         console.log("Identificador Final: " + identificadorFinal);
 
-        // Establece el valor del input y agrega el recibo
-        document.getElementById('monto_recibo').value = costoBarcode;
-        document.getElementById('no_cliente').value = numeroCliente;
-        addRecibo();
+        //Recuperar el nombre del cliente
+        // Realiza una solicitud AJAX para obtener los datos del cliente
+        fetch('obtener_datos_cliente.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `numeroCliente=${numeroCliente}`
+        })
+        .then(response => response.json()) // Cambia de .text() a .json() para parsear directamente
+        .then(data => {
+            console.log('Respuesta del servidor:', data); // Log de la respuesta completa
+            if (data && !data.error) {
+                document.getElementById('nombres').value = data.nombres;
+                document.getElementById('ap_pat').value = data.ap_pat;
+                document.getElementById('ap_mat').value = data.ap_mat;
+
+                // Muestra un mensaje o notifica que los datos han sido cargados
+                //showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
+
+                // Establece el valor del input y agrega el recibo
+                document.getElementById('monto_recibo').value = costoBarcode;
+                document.getElementById('no_cliente').value = numeroCliente;
+                addRecibo();
+            } else {
+                showAlert('No se encontraron datos para el cliente.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Error al obtener los datos del cliente.', 'error');
+        });
+
     } else {
         showAlert('El código de barras debe tener 30 dígitos', 'error');
     }
@@ -72,10 +102,20 @@ function processBarcode(barcode) {
 function addRecibo() {
     const montoReciboInput = document.getElementById('monto_recibo');
     const clienteInput = document.getElementById('no_cliente');
+    const nombresInput = document.getElementById('nombres');
+    const ApPatInput = document.getElementById('ap_pat');
+    const ApMatInput = document.getElementById('ap_mat');
+
+    // Obtenemos los valores (limpios)
     const montoRecibo = montoReciboInput.value.trim();
     const noCliente = clienteInput.value.trim();
+    const nombres = nombresInput.value.trim();
+    const apPat = ApPatInput.value.trim();
+    const apMat = ApMatInput.value.trim();
 
-    if (montoRecibo === "" || noCliente === "") {
+   
+
+    if (montoRecibo === "" || noCliente === "" || nombres === "" || apPat === "" || apMat === "") {
         showAlert('Verifique que los datos no esten vacíos', 'warning');
         return;
     }
@@ -84,11 +124,24 @@ function addRecibo() {
     const noClienteFloat = parseFloat(noCliente);
 
     recibos.push(montoReciboFloat);
+
+    // Creamos objeto cliente
+    const nuevoCliente = {
+        numero: noClienteFloat,
+        nombres: nombres,
+        apPat: apPat,
+        apMat: apMat
+    };
+
     clientes.push(noClienteFloat);
+    infoclientes.push(nuevoCliente);
     
     updateRecibosTable();
     montoReciboInput.value = ''; // Limpia el input después de agregar el recibo
     clienteInput.value = ''; // Limpia el input después de agregar el recibo
+    nombresInput.value = '';
+    ApPatInput.value = '';
+    ApMatInput.value = '';
     updateTotalRecibos(); // Actualiza el total de recibos
 }
 
@@ -108,9 +161,11 @@ function updateRecibosTable(){
         
         const newRow = document.createElement('tr');
         const cliente = clientes[index];
+        const infocliente = infoclientes[index];
         newRow.innerHTML = `
             <td>${monto}</td>
             <td>${cliente}</td>
+            <td>${infocliente.nombres} ${infocliente.apPat} ${infocliente.apMat}</td>
             <td>
                 <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${index})"><i class="bi bi-trash"></i>
                 </button>

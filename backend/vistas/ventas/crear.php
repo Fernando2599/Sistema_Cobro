@@ -17,6 +17,9 @@
                         <!-- Campo para el monto del recibo (rellenado automáticamente) -->
                         <input type="hidden" id="monto_recibo">
                         <input type="hidden" id="no_cliente">
+                        <input type="hidden" id="nombres">
+                        <input type="hidden" id="ap_pat">
+                        <input type="hidden" id="ap_mat">
                         <!-- input para el array recibos -->
                         <input type="hidden" name="recibos" id="recibos_hidden"> 
                         <!-- input para el array clientes -->
@@ -35,6 +38,7 @@
                             <tr>
                                 <th scope="col">Monto Recibo</th>
                                 <th scope="col">No. de Servicio</th>
+                                <th scope="col">Nombres</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                         </thead>
@@ -76,4 +80,4 @@
     </div>
 </div>
 
-<script src="public/js/venta_crear_f.js"></script>
+<script src="public/js/venta_crear_dat.js"></script>

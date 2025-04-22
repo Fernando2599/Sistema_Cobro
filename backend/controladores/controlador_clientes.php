@@ -14,12 +14,13 @@ class ControladorClientes{
         $offset = ($pagina_actual - 1) * $registros_por_pagina;
     
         // Parámetros de filtrado
+        $filtro_numero = isset($_GET['filter_numero']) ? $_GET['filter_numero'] : '';
         $filtro_nombres = isset($_GET['filter_nombres']) ? $_GET['filter_nombres'] : '';
         $filtro_ap_pat = isset($_GET['filter_ap_pat']) ? $_GET['filter_ap_pat'] : '';
         $filtro_ap_mat = isset($_GET['filter_ap_mat']) ? $_GET['filter_ap_mat'] : '';
     
-        if (!empty($filtro_nombres) || !empty($filtro_ap_pat) || !empty($filtro_ap_mat)) {
-            $clientes = Clientes::consultarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat, $offset, $registros_por_pagina);
+        if (!empty($filtro_numero) ||!empty($filtro_nombres) || !empty($filtro_ap_pat) || !empty($filtro_ap_mat)) {
+            $clientes = Clientes::consultarClientesFiltrados($filtro_numero, $filtro_nombres, $filtro_ap_pat, $filtro_ap_mat, $offset, $registros_por_pagina);
             $total_clientes = Clientes::contarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat);
         } else {
             $clientes = Clientes::consultarClientesPaginados($offset, $registros_por_pagina);

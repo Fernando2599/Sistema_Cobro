@@ -21,7 +21,7 @@ class ControladorClientes{
     
         if (!empty($filtro_numero) ||!empty($filtro_nombres) || !empty($filtro_ap_pat) || !empty($filtro_ap_mat)) {
             $clientes = Clientes::consultarClientesFiltrados($filtro_numero, $filtro_nombres, $filtro_ap_pat, $filtro_ap_mat, $offset, $registros_por_pagina);
-            $total_clientes = Clientes::contarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat);
+            $total_clientes = Clientes::contarClientesFiltrados($filtro_numero, $filtro_nombres, $filtro_ap_pat, $filtro_ap_mat);
         } else {
             $clientes = Clientes::consultarClientesPaginados($offset, $registros_por_pagina);
             $total_clientes = Clientes::contarClientes();  // O una función similar para contar todos los clientes

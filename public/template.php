@@ -40,8 +40,18 @@
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'ventas' && ($_GET['accion'] ?? '') === 'informacion' ? 'active' : '' ?>" href="?controlador=ventas&accion=informacion"><i class="bi bi-cash-stack"></i> Información de Venta</a>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'depositos' && ($_GET['accion'] ?? '') === 'crear' ? 'active' : '' ?>" href="?controlador=depositos&accion=crear"><i class="bi bi-bank"></i> Depositos</a>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'depositos' && ($_GET['accion'] ?? '') === 'reportes' ? 'active' : '' ?>" href="?controlador=depositos&accion=reportes"><i class="bi bi-file-earmark-text"></i> Reportes</a>
-                    <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'clientes' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=clientes&accion=inicio"><i class="bi bi-people-fill"></i> Clientes</a>
-                    <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'ActualizarMonto' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=periodos&accion=ActualizarMonto"><i class="bi bi-people-fill"></i> Actualizar monto</a>
+                    
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle <?= ($_GET['controlador'] ?? '') === 'clientes' ? 'active' : '' ?>" href="#" id="clientesDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-people-fill"></i> Clientes
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="clientesDropdown1">
+                            <li><a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'clientes' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=clientes&accion=inicio"><i class="bi bi-ui-checks-grid"></i>Lista de clientes</a></li>
+                            <li><a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'periodos' && ($_GET['accion'] ?? '') === 'ActualizarMonto' ? 'active' : '' ?>" href="?controlador=periodos&accion=ActualizarMonto"><i class="bi bi-currency-dollar"></i>Actualiza monto</a></li>
+                            <li><a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'periodos' && ($_GET['accion'] ?? '') === 'agregarclienteperiodo' ? 'active' : '' ?>" href="?controlador=periodos&accion=agregarclienteperiodo"><i class="bi bi-person"></i>Nuevo cliente</a></li>
+                        </ul>
+                    </div>
+                  
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'iniciar' && ($_GET['accion'] ?? '') === 'logout' ? 'active' : '' ?>" href="?controlador=iniciar&accion=logout"><i class="bi bi-box-arrow-right"></i> Salir</a>
                 <?php elseif ($_SESSION['rol_id'] == '2'): ?>
                     <a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'paginas' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=paginas&accion=inicio"><i class="bi bi-house"></i> Inicio</a>

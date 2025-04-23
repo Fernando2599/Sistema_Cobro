@@ -21,6 +21,10 @@ class Clientes {
         $conexionBD = BD::crearInstancia();
         $sql = $conexionBD->prepare("INSERT INTO clientes(numero_servicio, nombres, ap_pat, ap_mat) VALUES(?,?,?,?)");
         $sql->execute(array($numero_servicio, $nombres, $ap_pat, $ap_mat));
+
+        $cliente_nuevo = $conexionBD->lastInsertId();
+
+        return $cliente_nuevo;
     }
 
     

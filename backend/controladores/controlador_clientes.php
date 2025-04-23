@@ -45,7 +45,11 @@ class ControladorClientes{
             
 
             try {
-                Clientes::guardarClientes($no_servicio, $nombre, $ap_pat, $ap_mat );
+                $id_periodo_actual = Periodos::obtenerUltimoPeriodo();
+                $nuevo_cliente = Clientes::guardarClientes($no_servicio, $nombre, $ap_pat, $ap_mat );
+
+                Periodos::agregarClientesPeriodos($nuevo_cliente, $id_periodo_actual);
+
                 header("Location: ./?controlador=clientes&accion=crear&success=El cliente ha sido registrado correctamente.");
             } catch (Exception $e) {
                 // Redireccionar con mensaje de error

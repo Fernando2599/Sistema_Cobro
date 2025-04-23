@@ -59,21 +59,24 @@ class ControladorPeriodos{
         include_once("backend/vistas/periodos/actualizar_monto.php");
     } 
     public function agregarclienteperiodo(){
-        if (isset($_POST['nombre']) && isset($_POST['no_servicio']) && isset($_POST['monto_pago'])) {
-            $nombre = $_POST['nombre'];
+        if ($_POST) {
+
             $no_servicio = $_POST['no_servicio'];
-            $monto_pago = $_POST['monto_pago'];
-            $cliente_id = Clientes::obtenerIdPorNumeroServicio($no_servicio);
-            $id_periodo_actual = Periodos::obtenerUltimoPeriodo();
+            $nombre = $_POST['nombre'];
+            $ap_pat = $_POST['ap_pat'];
+            $ap_mat = $_POST['ap_mat'];
+
+            $ultimo_periodo_id = Periodos::obtenerUltimoPeriodo();
+            
 
             try {
-                Periodos::actualizarMonto($cliente_id, $monto_pago, $id_periodo_actual);
-                header("Location: ./?controlador=periodos&accion=ActualizarMonto&success=El cliente ha sido registrado correctamente.");
+                Clientes::guardarClientesPeriodos($no_servicio, $nombre, $ap_pat, $ap_mat, $ultimo_periodo_id );
+                header("Location: ./?controlador=clientes&accion=crear&success=El cliente ha sido registrado correctamente.");
             } catch (Exception $e) {
                 // Redireccionar con mensaje de error
-                header("Location: ./?controlador=periodos&accion=ActualizarMonto&error=Ocurrió un error al registrar al cliente: " . $e->getMessage());
+                header("Location: ./?controlador=clientes&accion=crear&error=Ocurrió un error al registrar al cliente: " . $e->getMessage());
             }
-            
+            exit();
         }
         include_once("backend/vistas/periodos/agregar_cliente_periodo.php");
     } 

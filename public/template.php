@@ -48,7 +48,7 @@
                         <ul class="dropdown-menu" aria-labelledby="clientesDropdown1">
                             <li><a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'clientes' && ($_GET['accion'] ?? '') === 'inicio' ? 'active' : '' ?>" href="?controlador=clientes&accion=inicio"><i class="bi bi-ui-checks-grid"></i>Lista de clientes</a></li>
                             <li><a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'periodos' && ($_GET['accion'] ?? '') === 'ActualizarMonto' ? 'active' : '' ?>" href="?controlador=periodos&accion=ActualizarMonto"><i class="bi bi-currency-dollar"></i>Actualiza monto</a></li>
-                            <li><a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'periodos' && ($_GET['accion'] ?? '') === 'agregarclienteperiodo' ? 'active' : '' ?>" href="?controlador=periodos&accion=agregarclienteperiodo"><i class="bi bi-person"></i>Nuevo cliente</a></li>
+                            <li><a class="nav-item nav-link <?= ($_GET['controlador'] ?? '') === 'clientes' && ($_GET['accion'] ?? '') === 'crear' ? 'active' : '' ?>" href="?controlador=clientes&accion=crear"><i class="bi bi-person"></i>Nuevo cliente</a></li>
                         </ul>
                     </div>
                   

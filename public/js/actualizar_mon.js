@@ -58,8 +58,12 @@ function processBarcode(barcode) {
                 document.getElementById('nombre').value = data.nombres;
                 document.getElementById('ap_pat').value = data.ap_pat;
                 document.getElementById('ap_mat').value = data.ap_mat;
+
+                // Establece el valor de los inputs, pero no envía el formulario
+                document.getElementById('no_servicio').value = numeroCliente;
+                document.getElementById('monto_pago').value = parseFloat(barcode.substring(20, 29));
             } else {
-                showAlert('No se encontraron datos para el cliente.', 'error');
+                showAlert('No se encontraron datos para el cliente. Favor de registrar', 'warning');
             }
         })
         .catch(error => {
@@ -68,12 +72,10 @@ function processBarcode(barcode) {
         });
         
 
-        // Establece el valor de los inputs, pero no envía el formulario
-        document.getElementById('no_servicio').value = numeroCliente;
-        document.getElementById('monto_pago').value = parseFloat(barcode.substring(20, 29));
+        
 
         // Muestra un mensaje o notifica que los datos han sido cargados
-        showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
+        //showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
     } else {
         showAlert('El código de barras debe tener 30 dígitos', 'error');
     }
@@ -104,9 +106,3 @@ document.getElementById('barcodeInput').addEventListener('keypress', function(ev
         event.preventDefault();
     }
 });
-
-// Función para mostrar alertas
-function showAlert(message, type) {
-    // Aquí puedes implementar la lógica para mostrar alertas en tu aplicación
-    console.log(`${type.toUpperCase()}: ${message}`);
-}

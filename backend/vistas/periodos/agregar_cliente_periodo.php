@@ -30,7 +30,7 @@
                 <input type="text" class="form-control" name="monto_pago" id="monto_pago" placeholder="Ingrese el no. de servicio" maxlength="6" readonly />
 
             </div>  
-            <input name="" id="" class="btn btn-success" type="submit" value="Actualizar monto"/>
+            <input name="" id="" class="btn btn-success" type="submit" value="Agregar Cliente"/>
             <a href="?controlador=clientes&accion=inicio" class="btn btn-danger">Cancelar</a>
                 
         
@@ -39,4 +39,4 @@
     </div>
 </div>
 
-<script src="public/js/actualizar_mon.js"></script>
+<script src="public/js/actualizar_m.js"></script>

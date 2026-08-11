@@ -58,6 +58,28 @@ class ControladorPeriodos{
         }
         include_once("backend/vistas/periodos/actualizar_monto.php");
     } 
+    public function agregarclienteperiodo(){
+        if ($_POST) {
+
+            $no_servicio = $_POST['no_servicio'];
+            $nombre = $_POST['nombre'];
+            $ap_pat = $_POST['ap_pat'];
+            $ap_mat = $_POST['ap_mat'];
+
+            $ultimo_periodo_id = Periodos::obtenerUltimoPeriodo();
+            
+
+            try {
+                Clientes::guardarClientesPeriodos($no_servicio, $nombre, $ap_pat, $ap_mat, $ultimo_periodo_id );
+                header("Location: ./?controlador=clientes&accion=crear&success=El cliente ha sido registrado correctamente.");
+            } catch (Exception $e) {
+                // Redireccionar con mensaje de error
+                header("Location: ./?controlador=clientes&accion=crear&error=Ocurrió un error al registrar al cliente: " . $e->getMessage());
+            }
+            exit();
+        }
+        include_once("backend/vistas/periodos/agregar_cliente_periodo.php");
+    } 
 
     public function obtenerDatosCliente($numeroCliente) {
         return Clientes::obtenerDatosPorNumero($numeroCliente);

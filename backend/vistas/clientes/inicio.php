@@ -24,7 +24,7 @@
                     </tr>
                     <tr class="filters">
                         
-                        <td></td>
+                        <td><input type="text" class="form-control" name="filter_numero" placeholder="No. Servicio" value="<?php echo htmlspecialchars($filtro_numero); ?>"></td>
                         <td><input type="text" class="form-control" name="filter_nombres" placeholder="Nombres" value="<?php echo htmlspecialchars($filtro_nombres); ?>"></td>
                         <td><input type="text" class="form-control" name="filter_ap_pat" placeholder="Apellido Paterno" value="<?php echo htmlspecialchars($filtro_ap_pat); ?>"></td>
                         <td><input type="text" class="form-control" name="filter_ap_mat" placeholder="Apellido Materno" value="<?php echo htmlspecialchars($filtro_ap_mat); ?>"></td>

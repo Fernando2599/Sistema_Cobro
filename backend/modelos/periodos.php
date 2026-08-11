@@ -56,6 +56,20 @@ class Periodos{
         }
         
     }
+    public static function agregarClientesPeriodos($cliente_id, $periodos_id) {
+        try {
+            // Crear la conexión dentro del método
+            $conexionBD = BD::crearInstancia();
+    
+            // Insertar el período para el cliente específico en la tabla intermedia
+            $sqlInsert = $conexionBD->prepare("INSERT INTO clientes_has_periodos (clientes_id, periodos_id) VALUES (?, ?)");
+            $sqlInsert->execute([$cliente_id, $periodos_id]);
+        } catch (PDOException $e) {
+            echo "Error en la consulta SQL: " . $e->getMessage();
+        }
+    }
+    
+    
 
     public static function historialPagos($id_cliente) {
         $conexionBD = BD::crearInstancia();

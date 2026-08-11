@@ -21,6 +21,10 @@ class Clientes {
         $conexionBD = BD::crearInstancia();
         $sql = $conexionBD->prepare("INSERT INTO clientes(numero_servicio, nombres, ap_pat, ap_mat) VALUES(?,?,?,?)");
         $sql->execute(array($numero_servicio, $nombres, $ap_pat, $ap_mat));
+
+        $cliente_nuevo = $conexionBD->lastInsertId();
+
+        return $cliente_nuevo;
     }
 
     
@@ -62,7 +66,7 @@ class Clientes {
     
 
     // Función para consultar clientes filtrados con paginación
-    public static function consultarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null, $inicio = 0, $registros_por_pagina = 45) {
+    public static function consultarClientesFiltrados($numero_servicio = null, $nombres = null, $ap_pat = null, $ap_mat = null, $inicio = 0, $registros_por_pagina = 45) {
         $lista_clientes = [];
         $conexionBD = BD::crearInstancia();
         
@@ -71,6 +75,10 @@ class Clientes {
         $params = [];
         
         // Añadir filtros
+        if ($numero_servicio){
+            $sql_query .= " AND numero_servicio = ?";
+            $params[] = $numero_servicio; // Búsqueda exacta
+        }
         if ($nombres) {
             $sql_query .= " AND nombres LIKE ?";
             $params[] = "%$nombres%";
@@ -114,13 +122,17 @@ class Clientes {
     
 
     // Función para contar clientes filtrados
-    public static function contarClientesFiltrados($nombres = null, $ap_pat = null, $ap_mat = null) {
+    public static function contarClientesFiltrados($numero_servicio = null, $nombres = null, $ap_pat = null, $ap_mat = null) {
         $conexionBD = BD::crearInstancia();
         
         $sql_query = "SELECT COUNT(*) as total FROM clientes WHERE 1=1";
         $params = [];
         
         // Añadir filtros
+        if ($numero_servicio){
+            $sql_query .= " AND numero_servicio = ?";
+            $params[] = $numero_servicio; // Búsqueda exacta
+        }
         if ($nombres) {
             $sql_query .= " AND nombres LIKE ?";
             $params[] = "%$nombres%";

@@ -14,13 +14,14 @@ class ControladorClientes{
         $offset = ($pagina_actual - 1) * $registros_por_pagina;
     
         // Parámetros de filtrado
+        $filtro_numero = isset($_GET['filter_numero']) ? $_GET['filter_numero'] : '';
         $filtro_nombres = isset($_GET['filter_nombres']) ? $_GET['filter_nombres'] : '';
         $filtro_ap_pat = isset($_GET['filter_ap_pat']) ? $_GET['filter_ap_pat'] : '';
         $filtro_ap_mat = isset($_GET['filter_ap_mat']) ? $_GET['filter_ap_mat'] : '';
     
-        if (!empty($filtro_nombres) || !empty($filtro_ap_pat) || !empty($filtro_ap_mat)) {
-            $clientes = Clientes::consultarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat, $offset, $registros_por_pagina);
-            $total_clientes = Clientes::contarClientesFiltrados($filtro_nombres, $filtro_ap_pat, $filtro_ap_mat);
+        if (!empty($filtro_numero) ||!empty($filtro_nombres) || !empty($filtro_ap_pat) || !empty($filtro_ap_mat)) {
+            $clientes = Clientes::consultarClientesFiltrados($filtro_numero, $filtro_nombres, $filtro_ap_pat, $filtro_ap_mat, $offset, $registros_por_pagina);
+            $total_clientes = Clientes::contarClientesFiltrados($filtro_numero, $filtro_nombres, $filtro_ap_pat, $filtro_ap_mat);
         } else {
             $clientes = Clientes::consultarClientesPaginados($offset, $registros_por_pagina);
             $total_clientes = Clientes::contarClientes();  // O una función similar para contar todos los clientes
@@ -44,7 +45,11 @@ class ControladorClientes{
             
 
             try {
-                Clientes::guardarClientes($no_servicio, $nombre, $ap_pat, $ap_mat );
+                $id_periodo_actual = Periodos::obtenerUltimoPeriodo();
+                $nuevo_cliente = Clientes::guardarClientes($no_servicio, $nombre, $ap_pat, $ap_mat );
+
+                Periodos::agregarClientesPeriodos($nuevo_cliente, $id_periodo_actual);
+
                 header("Location: ./?controlador=clientes&accion=crear&success=El cliente ha sido registrado correctamente.");
             } catch (Exception $e) {
                 // Redireccionar con mensaje de error

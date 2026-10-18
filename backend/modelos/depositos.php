@@ -7,14 +7,16 @@ class Depositos{
     public $total_efectivo;
     public $conteo_efectivo;
     public $fecha_venta;
+    public $conteo_registros;
 
-    public function __construct($id, $fecha, $hora, $total_efectivo, $conteo_efectivo, $fechas_venta = []) {
+    public function __construct($id, $fecha, $hora, $total_efectivo, $conteo_efectivo, $fechas_venta = [], $conteo_registros = 0) {
         $this->id = $id;
         $this->fecha = $fecha;
         $this->hora = $hora;
         $this->total_efectivo = $total_efectivo;
         $this->conteo_efectivo = $conteo_efectivo;
         $this->fechas_venta = $fechas_venta;
+        $this->conteo_registros = $conteo_registros;
     }
 
     public static function ConsultarMontoTotal($fecha) {
@@ -101,11 +103,39 @@ class Depositos{
     
     public static function buscarReport($id){
         $conexionBD = BD::crearInstancia();
-        $sql = $conexionBD->prepare("SELECT * FROM deposito WHERE id =?");
+        
+        // 1. Obtener datos del depósito
+        $sql = $conexionBD->prepare("SELECT * FROM deposito WHERE id = ?");
         $sql->execute(array($id));
-        $deposito = $sql->fetch();
-        return new Depositos($deposito['id'], $deposito['fecha'], $deposito['hora'], $deposito['total_efectivo'], $deposito['conteo_efectivo'], []);
-                
+        $deposito = $sql->fetch(PDO::FETCH_ASSOC);
+
+        if (!$deposito) {
+            return null;
+        }
+
+        // 2. Obtener fechas de venta asociadas
+        $sqlFechas = $conexionBD->prepare("SELECT fecha_venta FROM deposito_fechas WHERE deposito_id = ?");
+        $sqlFechas->execute(array($id));
+        $fechasRows = $sqlFechas->fetchAll(PDO::FETCH_ASSOC);
+
+        $fechas_venta = [];
+        $totalRegistros = 0;
+
+        foreach ($fechasRows as $row) {
+            $fechas_venta[] = $row['fecha_venta'];
+            $totalRegistros += self::contarRegistros($row['fecha_venta']);
+        }
+
+        // 3. Retornar el objeto con todas sus propiedades pobladas
+        return new Depositos(
+            $deposito['id'], 
+            $deposito['fecha'], 
+            $deposito['hora'], 
+            $deposito['total_efectivo'], 
+            $deposito['conteo_efectivo'], 
+            $fechas_venta,
+            $totalRegistros
+        );
     }
 
     public static function actualizarDeposito($id, $conteo_efectivo){
@@ -132,6 +162,33 @@ class Depositos{
     
         $resultado = $sql->fetch(PDO::FETCH_ASSOC);
         return $resultado['total_registros'];
+    }
+    public static function obtenerDetalleClientesPorDeposito($deposito_id) {
+    $conexionBD = BD::crearInstancia();
+    
+    // Consulta relacionando deposito_fechas -> recibo -> clientes_has_periodos -> clientes
+        $sql = $conexionBD->prepare("
+            SELECT 
+                df.fecha_venta,
+                r.id AS recibo_id,
+                r.monto_recibo AS monto_recibo,
+                r.fecha AS fecha_recibo,
+                r.hora AS hora_recibo,
+                c.id AS cliente_id,
+                CONCAT(c.nombres, ' ', c.ap_pat, ' ', c.ap_mat) AS nombre_cliente,
+                c.numero_servicio
+            FROM deposito_fechas df
+            INNER JOIN recibo r ON r.fecha = df.fecha_venta
+            INNER JOIN clientes_has_periodos chp ON chp.id = r.clientes_has_periodos_id
+            INNER JOIN clientes c ON c.id = chp.clientes_id
+            WHERE df.deposito_id = :deposito_id
+            ORDER BY r.fecha ASC, r.hora ASC
+                    ");
+        
+        $sql->bindParam(':deposito_id', $deposito_id, PDO::PARAM_INT);
+        $sql->execute();
+        
+        return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 }
 

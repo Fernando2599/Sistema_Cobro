@@ -11,8 +11,9 @@ class Ventas{
     public $nombres;
     public $ap_pat;
     public $ap_mat;
+    public $numero_servicio;
 
-    public function __construct($id, $fecha, $hora, $user_id, $nombres = null, $ap_pat = null, $ap_mat = null, $monto_recibo = null, $clientes_has_periodos = null) {
+    public function __construct($id, $fecha, $hora, $user_id, $nombres = null, $ap_pat = null, $ap_mat = null, $monto_recibo = null, $clientes_has_periodos = null, $numero_servicio = null) {
         $this->id = $id;
         $this->fecha = $fecha;
         $this->hora = $hora;
@@ -22,6 +23,7 @@ class Ventas{
         $this->ap_mat = $ap_mat;
         $this->monto_recibo = $monto_recibo;
         $this->clientes_has_periodos = $clientes_has_periodos; // Inicializa el nuevo atributo
+        $this->numero_servicio = $numero_servicio;
     }
 
     public static function guardarVentas($fecha, $hora, $total_venta, $user_id){ 
@@ -48,7 +50,7 @@ class Ventas{
         $sql = $conexionBD->prepare("
             SELECT 
                 r.id, r.fecha, r.hora, r.monto_recibo,
-                c.nombres, c.ap_pat, c.ap_mat
+                c.nombres, c.ap_pat, c.ap_mat, c.numero_servicio
             FROM 
                 recibo r
             INNER JOIN 
@@ -74,7 +76,9 @@ class Ventas{
                 $informacion['nombres'],
                 $informacion['ap_pat'],
                 $informacion['ap_mat'],
-                $informacion['monto_recibo']
+                $informacion['monto_recibo'],
+                null,
+                $informacion['numero_servicio']
             );
     
             $lista_ventas[] = $venta;

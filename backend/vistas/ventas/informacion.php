@@ -21,10 +21,12 @@
                 <table class="table table-bordered" id="recibosTable">
                     <thead>
                         <tr>
+                            <th scope="col">ID</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Hora</th>
                             <th scope="col">Precio del recibo</th>
                             <th scope="col">Cliente</th>
+                            <th scope="col">Número de servicio</th>
                             <?php if ($_SESSION['rol_id'] == '2'): ?>
                                 <th scope="col">Accion</th>
                             <?php endif;?>
@@ -34,10 +36,12 @@
                         <?php 
                         foreach ($ventas as $info): ?>
                             <tr>
+                                <td><?php echo $info->id; ?></td>
                                 <td><?php echo $info->fecha; ?></td>
                                 <td><?php echo $info->hora; ?></td>
                                 <td><?php echo $info->monto_recibo; ?></td>
                                 <td><?php echo $info->nombres . ' ' . $info->ap_pat . ' ' . $info->ap_mat; ?></td>
+                                <td><?php echo $info->numero_servicio; ?></td>
                                 
                                 <?php if ($_SESSION['rol_id'] == '2'):?>
                                 <td>

@@ -119,8 +119,47 @@ class Ventas{
 
     public static function borrar($id){
         $conexionBD = BD::crearInstancia();
-        $sql = $conexionBD->prepare("DELETE FROM recibo WHERE id=?");
-        $sql->execute(array($id));
+        
+        try {
+            // Iniciar transacción para garantizar la integridad de los datos
+            $conexionBD->beginTransaction();
+
+            // 1. Obtener los IDs relacionados de la tabla recibo antes de borrarlo
+            $sqlSelect = $conexionBD->prepare("SELECT venta_id, clientes_has_periodos_id FROM recibo WHERE id = ?");
+            $sqlSelect->execute(array($id));
+            $recibo = $sqlSelect->fetch();
+
+            if (!$recibo) {
+                throw new Exception("El recibo no existe.");
+            }
+
+            $venta_id = $recibo['venta_id'];
+            $clientes_has_periodos_id = $recibo['clientes_has_periodos_id'];
+
+            // 2. Borrar el registro en la tabla recibo
+            $sqlRecibo = $conexionBD->prepare("DELETE FROM recibo WHERE id = ?");
+            $sqlRecibo->execute(array($id));
+
+            // 3. Borrar el registro asociado en la tabla venta
+            if ($venta_id) {
+                $sqlVenta = $conexionBD->prepare("DELETE FROM venta WHERE id = ?");
+                $sqlVenta->execute(array($venta_id));
+            }
+
+            // 4. Actualizar el estado a "no pagado" en la tabla clientes_has_periodos
+            if ($clientes_has_periodos_id) {
+                $sqlEstado = $conexionBD->prepare("UPDATE clientes_has_periodos SET estado = 'no pagado' WHERE id = ?");
+                $sqlEstado->execute(array($clientes_has_periodos_id));
+            }
+
+            // Confirmar los cambios si todo salió bien
+            $conexionBD->commit();
+
+        } catch (Exception $e) {
+            // Revertir los cambios si ocurre algún error
+            $conexionBD->rollBack();
+            throw $e; // Propagar la excepción para que el controlador la capture
+        }
     }
 
     public static function buscar($id){

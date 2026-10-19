@@ -44,6 +44,7 @@ function handleBarcodeInput(event) {
 }
 
 // Procesa el código de barras
+// Procesa el código de barras
 function processBarcode(barcode) {
     barcode = barcode.trim();
 
@@ -54,17 +55,9 @@ function processBarcode(barcode) {
         const costo = barcode.substring(20, 29);
         const identificadorFinal = barcode.substring(29);
 
-        // Verifica y convierte el costo a formato decimal si es necesario
         const costoBarcode = parseFloat(costo);
 
-        console.log("Identificador Inicial: " + identificadorInicial);
-        console.log("Número de Cliente: " + numeroCliente);
-        console.log("Fecha: " + fecha);
-        console.log("Costo: " + costoBarcode);
-        console.log("Identificador Final: " + identificadorFinal);
-
-        //Recuperar el nombre del cliente
-        // Realiza una solicitud AJAX para obtener los datos del cliente
+        // Recuperar el nombre y estado del cliente
         fetch('obtener_datos_cliente.php', {
             method: 'POST',
             headers: {
@@ -72,21 +65,26 @@ function processBarcode(barcode) {
             },
             body: `numeroCliente=${numeroCliente}`
         })
-        .then(response => response.json()) // Cambia de .text() a .json() para parsear directamente
+        .then(response => response.json())
         .then(data => {
-            console.log('Respuesta del servidor:', data); // Log de la respuesta completa
+            console.log('Respuesta del servidor:', data);
             if (data && !data.error) {
+                
+                // --- VALIDACIÓN DE ESTADO PAGADO ---
+                if (data.estado && data.estado.toLowerCase() === 'pagado') {
+                    showAlert('El recibo de este cliente ya se encuentra en estado "Pagado". No se puede volver a cobrar.', 'warning');
+                    return; // Detiene la ejecución y no lo agrega
+                }
+
                 document.getElementById('nombres').value = data.nombres;
                 document.getElementById('ap_pat').value = data.ap_pat;
                 document.getElementById('ap_mat').value = data.ap_mat;
 
-                // Muestra un mensaje o notifica que los datos han sido cargados
-                //showAlert('Datos del código de barras cargados. Completa el formulario.', 'success');
-
-                // Establece el valor del input y agrega el recibo
                 document.getElementById('monto_recibo').value = costoBarcode;
                 document.getElementById('no_cliente').value = numeroCliente;
-                addRecibo();
+                
+                // Agrega el recibo (incluyendo la validación previa de duplicados en lista)
+                addRecibo(barcode);
             } else {
                 showAlert('No se encontraron datos para el cliente.', 'error');
             }
@@ -100,9 +98,8 @@ function processBarcode(barcode) {
         showAlert('El código de barras debe tener 30 dígitos', 'error');
     }
 }
-
-// Función para agregar un recibo
-function addRecibo() {
+// Función para agregar un recibo (ahora recibe el código de barras opcionalmente)
+function addRecibo(barcodeFull = '') {
     const montoReciboInput = document.getElementById('monto_recibo');
     const clienteInput = document.getElementById('no_cliente');
     const nombresInput = document.getElementById('nombres');
@@ -120,8 +117,25 @@ function addRecibo() {
         return;
     }
 
-    // Guardamos todo en un solo objeto dentro del array
+    // --- VALIDACIÓN DE DUPLICADOS ---
+    // Si tenemos el código de barras completo, verificamos si ya existe en la lista
+    if (barcodeFull !== "") {
+        const yaExiste = listaRecibos.some(item => item.barcode === barcodeFull);
+        if (yaExiste) {
+            showAlert('Este recibo ya ha sido agregado a la lista de cobro.', 'warning');
+            // Limpiamos los inputs y salimos
+            montoReciboInput.value = '';
+            clienteInput.value = '';
+            nombresInput.value = '';
+            ApPatInput.value = '';
+            ApMatInput.value = '';
+            return;
+        }
+    }
+
+    // Guardamos todo en un solo objeto dentro del array (incluyendo el barcode para futuros chequeos)
     listaRecibos.push({
+        barcode: barcodeFull,
         monto: parseFloat(montoRecibo),
         numero: parseFloat(noCliente),
         nombres: nombres,
@@ -140,7 +154,7 @@ function addRecibo() {
 
 // Función para eliminar un recibo
 function removeRecibo(index) {
-    listaRecibos.splice(index, 1); // Solo borra de un lugar y listo
+    listaRecibos.splice(index, 1); 
     updateRecibosTable();
     updateTotalRecibos();
 }
@@ -159,20 +173,20 @@ function updateRecibosTable(){
                 <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${index})">
                     <i class="bi bi-trash"></i>
                 </button>
-            `;
+            </td>
+        `;
         recibosTableBody.appendChild(newRow);
     });
 }
+
 // Función para actualizar el total de recibos
 function updateTotalRecibos() {
-    // Extraemos los montos del objeto para sumar
     const totalRecibos = listaRecibos.reduce((acc, current) => acc + current.monto, 0);
     document.getElementById('total_recibos').value = totalRecibos;
     calculateChange();
 }
 
 function prepareData() {
-    // Mapeamos los arrays independientes que PHP espera recibir en el backend
     const recibosArray = listaRecibos.map(item => item.monto);
     const clientesArray = listaRecibos.map(item => item.numero);
 
@@ -197,25 +211,21 @@ function calculateChange() {
 
 // Maneja el envío del formulario
 document.getElementById('submitBtn').addEventListener('click', function() {
-    // Simula el evento 'submit' del formulario
     document.getElementById('reciboForm').dispatchEvent(new Event('submit'));
 });
 
 document.getElementById('reciboForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita el envío del formulario si no se cumple la condición
-    if (recibos.length === 0) {
+    event.preventDefault(); 
+    // Se corrigió 'recibos.length' por 'listaRecibos.length' que es el array correcto en uso
+    if (listaRecibos.length === 0) {
         showAlert('Debe agregar al menos un recibo antes de registrar.', 'error');
         return;
     }
     showAlert('Los datos han sido registrados correctamente.', 'exitoso', function() {
-        prepareData(); // Prepara los datos para enviarlos
-        document.getElementById('reciboForm').submit(); // Envía el formulario
+        prepareData(); 
+        document.getElementById('reciboForm').submit(); 
     });
 });
-
-
-// Función para mostrar alertas
-
 
 // Asocia el manejador del input al campo de código de barras
 document.getElementById('barcodeInput').addEventListener('input', handleBarcodeInput);

@@ -184,13 +184,18 @@ class Clientes {
     }
 
     public static function obtenerDatosPorNumero($numeroCliente) {
-        $conexionBD = BD::crearInstancia();
-        $sql = "SELECT nombres, ap_pat, ap_mat FROM clientes WHERE numero_servicio = :numeroCliente";
-        $stmt = $conexionBD->prepare($sql);
-        $stmt->bindParam(':numeroCliente', $numeroCliente, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+    $conexionBD = BD::crearInstancia();
+    $sql = "SELECT c.nombres, c.ap_pat, c.ap_mat, ch.estado 
+            FROM clientes c
+            LEFT JOIN clientes_has_periodos ch ON c.id = ch.clientes_id
+            LEFT JOIN periodos p ON p.id = ch.periodos_id
+            WHERE c.numero_servicio = :numeroCliente
+            ORDER BY p.id DESC LIMIT 1";
+    $stmt = $conexionBD->prepare($sql);
+    $stmt->bindParam(':numeroCliente', $numeroCliente, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
     public static function ObtenerEstadoPago($idCliente, $idUltimoPeriodo){
         $conexionBD = BD::crearInstancia();
         $sql = "SELECT c.numero_servicio, c.nombres, c.ap_pat, c.ap_mat, ch.id, ch.clientes_id, ch.estado , ch.periodos_id , ch.monto_pago FROM clientes c INNER JOIN clientes_has_periodos ch on c.id = ch.clientes_id WHERE c.id = :idCliente AND ch.periodos_id = :idUltimoPeriodo";

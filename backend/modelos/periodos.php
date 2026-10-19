@@ -1,6 +1,6 @@
 <?php
 
-class Periodos{
+class Periodos {
 
     public $id;
     public $limite_pago;
@@ -9,7 +9,7 @@ class Periodos{
     public $estado;
     public $monto_pago;
 
-    public function __construct($id, $limite_pago, $periodo_inicio, $periodo_fin, $estado, $monto_pago){
+    public function __construct($id, $limite_pago, $periodo_inicio, $periodo_fin, $estado, $monto_pago) {
         $this->id = $id;
         $this->limite_pago = $limite_pago;
         $this->periodo_inicio = $periodo_inicio;
@@ -18,7 +18,7 @@ class Periodos{
         $this->monto_pago = $monto_pago;
     }
 
-    public static function guardarPeriodos($limite_pago, $periodo_inicio, $periodo_fin){
+    public static function guardarPeriodos($limite_pago, $periodo_inicio, $periodo_fin) {
         $conexionBD = BD::crearInstancia();
 
         // Insertar el nuevo periodo en la tabla "periodos"
@@ -54,8 +54,8 @@ class Periodos{
         } catch (PDOException $e) {
             echo "Error en la consulta SQL: " . $e->getMessage();
         }
-        
     }
+
     public static function agregarClientesPeriodos($cliente_id, $periodos_id) {
         try {
             // Crear la conexión dentro del método
@@ -68,16 +68,26 @@ class Periodos{
             echo "Error en la consulta SQL: " . $e->getMessage();
         }
     }
-    
-    
 
     public static function historialPagos($id_cliente) {
         $conexionBD = BD::crearInstancia();
+        // Se realiza un LEFT JOIN con la tabla 'recibo' mediante 'clientes_has_periodos_id'
+        // Si la columna de fecha en recibo tiene otro nombre (ej. 'fecha'), cámbiala aquí
         $sql = $conexionBD->prepare("
-            SELECT c.nombres, c.ap_pat, c.ap_mat, p.limite_pago, p.periodo_inicio, p.periodo_fin, ch.estado, COALESCE(ch.monto_pago, 0) AS monto_recibo
+            SELECT 
+                c.nombres, 
+                c.ap_pat, 
+                c.ap_mat, 
+                p.limite_pago, 
+                p.periodo_inicio, 
+                p.periodo_fin, 
+                ch.estado, 
+                COALESCE(ch.monto_pago, 0) AS monto_recibo,
+                r.fecha AS fecha_pago
             FROM clientes_has_periodos ch
             INNER JOIN clientes c ON c.id = ch.clientes_id
             INNER JOIN periodos p ON p.id = ch.periodos_id
+            LEFT JOIN recibo r ON r.clientes_has_periodos_id = ch.id
             WHERE ch.clientes_id = ?
             ORDER BY p.periodo_inicio DESC
         ");
@@ -85,7 +95,7 @@ class Periodos{
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public static function obtenerNombreCliente($id_cliente){
+    public static function obtenerNombreCliente($id_cliente) {
         $conexionBD = BD::crearInstancia();
         $sql = $conexionBD->prepare("
             SELECT numero_servicio, nombres, ap_pat, ap_mat 
@@ -110,7 +120,7 @@ class Periodos{
         $sql->execute(array($periodo_id, $cliente_id));
     }
 
-    public static function actualizarMonto($no_servicio, $monto_pago, $periodo_actual){
+    public static function actualizarMonto($no_servicio, $monto_pago, $periodo_actual) {
         $conexionBD = BD::crearInstancia();
         $sql = $conexionBD->prepare("UPDATE clientes_has_periodos SET monto_pago = :montoPago WHERE periodos_id = :idPeriodo AND clientes_id = :cliente");
         $sql->bindParam(':montoPago', $monto_pago);
@@ -118,7 +128,5 @@ class Periodos{
         $sql->bindParam(':cliente', $no_servicio);
         $sql->execute();
     }
-
-   
 }
 ?>

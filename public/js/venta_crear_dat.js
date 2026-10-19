@@ -1,6 +1,9 @@
-let recibos = [];
-let clientes = [];
-let infoclientes = [];
+// let recibos = [];
+// let clientes = [];
+// let infoclientes = [];
+
+// Usarías uno solo:
+let listaRecibos = [];
 let barcodeBuffer = '';
 
 
@@ -106,79 +109,76 @@ function addRecibo() {
     const ApPatInput = document.getElementById('ap_pat');
     const ApMatInput = document.getElementById('ap_mat');
 
-    // Obtenemos los valores (limpios)
     const montoRecibo = montoReciboInput.value.trim();
     const noCliente = clienteInput.value.trim();
     const nombres = nombresInput.value.trim();
     const apPat = ApPatInput.value.trim();
     const apMat = ApMatInput.value.trim();
 
-   
-
     if (montoRecibo === "" || noCliente === "" || nombres === "" || apPat === "") {
         showAlert('Verifique que los datos no esten vacíos', 'warning');
         return;
     }
 
-    const montoReciboFloat = parseFloat(montoRecibo);
-    const noClienteFloat = parseFloat(noCliente);
-
-    recibos.push(montoReciboFloat);
-
-    // Creamos objeto cliente
-    const nuevoCliente = {
-        numero: noClienteFloat,
+    // Guardamos todo en un solo objeto dentro del array
+    listaRecibos.push({
+        monto: parseFloat(montoRecibo),
+        numero: parseFloat(noCliente),
         nombres: nombres,
         apPat: apPat,
         apMat: apMat
-    };
+    });
 
-    clientes.push(noClienteFloat);
-    infoclientes.push(nuevoCliente);
-    
     updateRecibosTable();
-    montoReciboInput.value = ''; // Limpia el input después de agregar el recibo
-    clienteInput.value = ''; // Limpia el input después de agregar el recibo
+    montoReciboInput.value = '';
+    clienteInput.value = '';
     nombresInput.value = '';
     ApPatInput.value = '';
     ApMatInput.value = '';
-    updateTotalRecibos(); // Actualiza el total de recibos
+    updateTotalRecibos();
 }
 
 // Función para eliminar un recibo
 function removeRecibo(index) {
-    recibos.splice(index, 1); // Elimina el recibo del array
-    clientes.splice(index, 1); // Elimina el recibo del array
-    
+    listaRecibos.splice(index, 1); // Solo borra de un lugar y listo
     updateRecibosTable();
-    updateTotalRecibos(); // Actualiza el total después de eliminar
+    updateTotalRecibos();
 }
+
 function updateRecibosTable(){
     const recibosTableBody = document.getElementById('recibos-table-body');
-    recibosTableBody.innerHTML = ''; // Limpia la tabla
+    recibosTableBody.innerHTML = '';
 
-    recibos.forEach((monto, index) => {
-        
+    listaRecibos.forEach((item, index) => {
         const newRow = document.createElement('tr');
-        const cliente = clientes[index];
-        const infocliente = infoclientes[index];
         newRow.innerHTML = `
-            <td>${monto}</td>
-            <td>${cliente}</td>
-            <td>${infocliente.nombres} ${infocliente.apPat} ${infocliente.apMat}</td>
+            <td>${item.monto}</td>
+            <td>${item.numero}</td>
+            <td>${item.nombres} ${item.apPat} ${item.apMat}</td>
             <td>
-                <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${index})"><i class="bi bi-trash"></i>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRecibo(${index})">
+                    <i class="bi bi-trash"></i>
                 </button>
-            </td>`;
+            `;
         recibosTableBody.appendChild(newRow);
     });
- 
 }
 // Función para actualizar el total de recibos
 function updateTotalRecibos() {
-    const totalRecibos = recibos.reduce((acc, current) => acc + current, 0);
+    // Extraemos los montos del objeto para sumar
+    const totalRecibos = listaRecibos.reduce((acc, current) => acc + current.monto, 0);
     document.getElementById('total_recibos').value = totalRecibos;
-    calculateChange(); // Calcula el cambio
+    calculateChange();
+}
+
+function prepareData() {
+    // Mapeamos los arrays independientes que PHP espera recibir en el backend
+    const recibosArray = listaRecibos.map(item => item.monto);
+    const clientesArray = listaRecibos.map(item => item.numero);
+
+    document.getElementById('recibos_hidden').value = JSON.stringify(recibosArray);
+    document.getElementById('clientes_hidden').value = JSON.stringify(clientesArray);
+    document.getElementById('total_recibos_hidden').value = document.getElementById('total_recibos').value;
 }
 
 // Función para calcular el cambio
@@ -213,13 +213,6 @@ document.getElementById('reciboForm').addEventListener('submit', function(event)
     });
 });
 
-
-// Prepara los datos para el envío
-function prepareData() {
-    document.getElementById('recibos_hidden').value = JSON.stringify(recibos); //array recibos
-    document.getElementById('clientes_hidden').value = JSON.stringify(clientes); //array clientes
-    document.getElementById('total_recibos_hidden').value = document.getElementById('total_recibos').value;
-}
 
 // Función para mostrar alertas
 
